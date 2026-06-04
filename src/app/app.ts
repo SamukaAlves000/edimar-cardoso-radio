@@ -556,19 +556,40 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
     this.canvasCtx = canvas.getContext('2d');
     this.resizeCanvas();
     window.addEventListener('resize', () => this.resizeCanvas());
-
-    // Start painting visualize loop
     this.startVisualizationLoop();
 
-    // Sync native radio player state with signals
     const radio = this.radioPlayer?.nativeElement;
-    if (radio) {
-      radio.addEventListener('playing', () => { this.isConnecting.set(false); this.isPlaying.set(true); });
-      radio.addEventListener('pause', () => this.isPlaying.set(false));
-      radio.addEventListener('waiting', () => this.isConnecting.set(true));
-      radio.addEventListener('canplay', () => this.isConnecting.set(false));
-      radio.addEventListener('error', () => { this.isConnecting.set(false); this.isPlaying.set(false); });
-    }
+    if (!radio) return;
+
+    // Sync state — "waiting" is normal live-stream buffering, never set connecting after first play
+    radio.addEventListener('playing', () => { this.isConnecting.set(false); this.isPlaying.set(true); });
+    radio.addEventListener('canplay', () => { this.isConnecting.set(false); });
+    radio.addEventListener('pause',   () => { this.isPlaying.set(false); this.isConnecting.set(false); });
+    radio.addEventListener('error',   () => { this.isConnecting.set(false); this.isPlaying.set(false); });
+
+    // Autoplay attempt — browser may block; if so, silently clear spinner
+    radio.volume = this.isMuted() ? 0 : this.currentVolume();
+    this.isConnecting.set(true);
+    radio.play().catch(() => this.isConnecting.set(false));
+
+    // Media Session API — artwork + controls on lock screen / notification
+    this.setupMediaSession();
+  }
+
+  private setupMediaSession() {
+    if (!('mediaSession' in navigator)) return;
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: 'Rádio Local 87,9 FM',
+      artist: 'Edmar Cardoso',
+      album: 'Programação Ao Vivo · 87,9 FM',
+      artwork: [
+        { src: '/edimar.png', sizes: '192x192', type: 'image/png' },
+        { src: '/edimar.png', sizes: '512x512', type: 'image/png' },
+      ],
+    });
+    navigator.mediaSession.setActionHandler('play',  () => { this.radioPlayer?.nativeElement.play(); });
+    navigator.mediaSession.setActionHandler('pause', () => { this.radioPlayer?.nativeElement.pause(); });
+    navigator.mediaSession.setActionHandler('stop',  () => { this.radioPlayer?.nativeElement.pause(); });
   }
 
   ngOnDestroy() {
@@ -589,13 +610,13 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.isConnecting.set(true);
       radio.volume = this.isMuted() ? 0 : this.currentVolume();
+      // Reload stream on manual reconnect to flush stale buffer
+      radio.load();
       radio.play().catch((err) => {
         console.error('Play error:', err);
         this.isConnecting.set(false);
         this.isPlaying.set(false);
-        this.playError.set(
-          'Toque no player acima para iniciar a transmissão ou verifique sua conexão.'
-        );
+        this.playError.set('Não foi possível iniciar. Verifique sua conexão e tente novamente.');
       });
     }
   }
