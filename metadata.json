@@ -1,0 +1,6 @@
+{
+  "name": "Campos Belos Digital",
+  "description": "Campos Belos Digital - A sua rádio digital de alta performance, com jornalismo, opinião, cultura e música boa 24h por dia.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

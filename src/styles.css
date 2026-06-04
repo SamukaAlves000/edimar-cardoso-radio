@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Material+Icons&display=swap');
+@import "tailwindcss";
+
+:root {
+  --background: #0B0F1A;
+  --surface: #111827;
+  --surface-2: #1A1F2E;
+
+  --primary: #4F46E5;
+  --secondary: #7C3AED;
+  --accent: #EC4899;
+  --success: #00E5AB;
+
+  --text-primary: #FFFFFF;
+  --text-secondary: #E5E7EB;
+  --text-muted: #A1A1AA;
+
+  --gradient-primary: linear-gradient(135deg, #4F46E5, #7C3AED, #EC4899);
+  --gradient-dark: linear-gradient(135deg, #0B0F1A 0%, #111827 40%, #1A1F2E 100%);
+  --gradient-live: linear-gradient(135deg, #7C3AED, #EC4899);
+  --gradient-online: linear-gradient(135deg, #00E5AB, #00C896);
+}
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  
+  --color-bg-dark: #0B0F1A;
+  --color-surface: #111827;
+  --color-surface-2: #1A1F2E;
+  
+  --color-neon-blue: #4F46E5;
+  --color-neon-purple: #7C3AED;
+  --color-neon-magenta: #EC4899;
+  --color-neon-turquoise: #00E5AB;
+  
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #E5E7EB;
+  --color-text-muted: #A1A1AA;
+  
+  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-spin-slow: spin 12s linear infinite;
+}
+
+@utility bg-gradient-primary {
+  background-image: var(--gradient-primary);
+}
+
+@utility bg-gradient-dark-neon {
+  background-image: var(--gradient-dark);
+}
+
+@utility bg-gradient-live {
+  background-image: var(--gradient-live);
+}
+
+@utility bg-gradient-online {
+  background-image: var(--gradient-online);
+}
+
+@utility bg-clean-dots {
+  background-image: radial-gradient(circle at 1px 1px, rgba(124, 58, 237, 0.08) 1px, transparent 0);
+  background-size: 20px 20px;
+}
+
+@utility text-glow-neon {
+  text-shadow: 0 0 12px rgba(124, 58, 237, 0.6);
+}
+
+@utility text-glow-magenta {
+  text-shadow: 0 0 12px rgba(236, 72, 153, 0.6);
+}
+
+@utility text-glow-turquoise {
+  text-shadow: 0 0 12px rgba(0, 229, 171, 0.8);
+}
+
+@utility border-glow-purple {
+  box-shadow: 0 0 15px rgba(124, 58, 237, 0.25);
+}
+
+@utility border-glow-magenta {
+  box-shadow: 0 0 15px rgba(236, 72, 153, 0.25);
+}
+
+@utility shadow-clean {
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.65), 0 1px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Custom scrollbar for dark theme */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0B0F1A;
+}
+::-webkit-scrollbar-thumb {
+  background: #1A1F2E;
+  border: 1px solid #2A134D;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #7C3AED;
+}
+
+/* Custom range input styling */
+input[type="range"] {
+  accent-color: #7C3AED;
+}
+

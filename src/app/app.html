@@ -1,0 +1,1076 @@
+@if (toastMessage()) {
+<div class="fixed bottom-24 right-4 z-50 bg-[#111827] border border-[#7C3AED]/30 text-white text-xs px-4 py-3.5 rounded-xl shadow-2xl flex items-center gap-3 animate-bounce max-w-sm border-glow-purple">
+  <div class="h-8 w-8 bg-[#7C3AED]/10 rounded-full flex items-center justify-center flex-shrink-0">
+    <span class="material-icons text-[#00E5AB] text-sm">notifications_active</span>
+  </div>
+  <div class="flex-1 min-w-0">
+    <p class="font-extrabold text-[9px] text-[#7C3AED] uppercase tracking-widest leading-none">Aviso do Estúdio</p>
+    <p class="text-[11px] text-[#E5E7EB] mt-0.5 leading-tight">{{ toastMessage() }}</p>
+  </div>
+  <button (click)="toastMessage.set(null)" class="text-[#A1A1AA] hover:text-white transition-colors" aria-label="Fechar">
+    <span class="material-icons text-base">close</span>
+  </button>
+</div>
+}
+
+<div class="min-h-screen bg-[#0B0F1A] font-sans text-slate-200 antialiased bg-clean-dots">
+  <!-- Status Overhead stats -->
+  <div class="bg-[#0B0F1A] border-b border-[#1A1F2E]/60 py-2.5 px-4 text-xs font-semibold text-slate-300">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+      <div class="flex items-center gap-2.5">
+        <span class="flex h-2 w-2 relative">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00E5AB] opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-[#00E5AB]"></span>
+        </span>
+        <span class="text-[#00E5AB] font-bold uppercase tracking-widest text-[9px] text-glow-turquoise">NO AR AGORA:</span>
+        <span class="font-bold text-white">{{ currentlyOnAir().title }}</span>
+        <span class="text-slate-700">|</span>
+        <span class="text-[#A1A1AA] font-medium text-[11px]">Com {{ currentlyOnAir().host }}</span>
+      </div>
+      <div class="flex items-center gap-4 text-slate-400">
+        <div class="flex items-center gap-1.5 font-medium">
+          <span class="material-icons text-xs text-[#7C3AED] leading-none">schedule</span>
+          <span>Brasília (UTC-3): <span class="font-mono text-white font-bold">{{ braziliaTime() }}</span></span>
+        </div>
+        <span class="text-slate-700 hidden md:inline">|</span>
+        <div class="flex items-center gap-1.5 font-medium">
+          <span class="material-icons text-xs text-[#00E5AB] leading-none">people</span>
+          <span><span class="font-mono font-bold text-[#00E5AB] text-glow-turquoise">{{ listenerCount() }}</span> ouvintes online</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Primary Header Nav -->
+  <header id="app-header" class="sticky top-0 z-40 bg-[#0B0F1A]/85 backdrop-blur-md border-b border-[#1A1F2E]/65">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <!-- Pink/Purple pulse brand logo -->
+      <a href="#" class="flex items-center gap-3 group focus:outline-none" id="brand-logo">
+        <div class="flex items-center gap-[3px] h-9">
+          <span class="w-[3px] h-4 bg-[#7C3AED] rounded-full animate-pulse"></span>
+          <span class="w-[3px] h-7 bg-[#EC4899] rounded-full animate-pulse [animation-delay:0.2s]"></span>
+          <span class="w-[3px] h-9 bg-gradient-to-t from-[#7C3AED] to-[#EC4899] rounded-full animate-pulse [animation-delay:0.4s]"></span>
+          <span class="w-[3px] h-6 bg-[#00E5AB] rounded-full animate-pulse [animation-delay:0.1s]"></span>
+          <span class="w-[3px] h-3 bg-[#4F46E5] rounded-full animate-pulse [animation-delay:0.3s]"></span>
+        </div>
+        <div>
+          <div class="flex items-baseline gap-1.5 leading-none">
+            <h1 class="text-base font-black tracking-widest text-white uppercase">
+              RÁDIO <span class="bg-gradient-to-r from-[#7C3AED] via-[#EC4899] to-[#00E5AB] bg-clip-text text-transparent">LOCAL</span>
+            </h1>
+            <span class="text-[10px] font-mono text-[#00E5AB] font-bold">87,9 FM</span>
+          </div>
+          <p class="text-[8px] text-[#A1A1AA] font-black uppercase tracking-wider select-none">Web Broadcast Digital</p>
+        </div>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex items-center gap-6 text-[11px] font-extrabold uppercase tracking-widest text-[#A1A1AA]" id="desktop-nav">
+        <a href="#inicio" class="hover:text-white transition-colors relative py-1 hover:after:w-full after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-[#7C3AED] after:transition-all">Início</a>
+        <a href="#sobre" class="hover:text-white transition-colors relative py-1 hover:after:w-full after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-[#7C3AED] after:transition-all">A Rádio</a>
+        <a href="#programacao" class="hover:text-white transition-colors relative py-1 hover:after:w-full after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-[#7C3AED] after:transition-all">Programação</a>
+        <a href="#noticias" class="hover:text-white transition-colors relative py-1 hover:after:w-full after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-[#7C3AED] after:transition-all">Notícias</a>
+        <a href="#eventos" class="hover:text-white transition-colors relative py-1 hover:after:w-full after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-[#7C3AED] after:transition-all">Eventos</a>
+        <a href="#recados" class="hover:text-white transition-colors relative py-1 hover:after:w-full after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-[#7C3AED] after:transition-all">Contato</a>
+      </nav>
+
+      <!-- Right Contacts & admin toggle -->
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:flex items-center gap-3 text-slate-400">
+          <a href="https://facebook.com" target="_blank" class="hover:text-white transition-colors" title="Facebook">
+            <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" /></svg>
+          </a>
+          <a href="https://instagram.com" target="_blank" class="hover:text-white transition-colors" title="Instagram">
+            <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z" /></svg>
+          </a>
+          <a href="https://wa.me/5562999999999" target="_blank" class="hover:text-white transition-all" title="WhatsApp">
+            <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.73-1.451L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.851-4.106 9.855-9.15.002-2.443-.949-4.739-2.677-6.471C16.924 3.25 14.636 2.3 12.2 2.3c-5.444 0-9.866 4.41-9.87 9.456-.002 2.085.547 4.122 1.59 5.895L2.854 21.2l3.793-.946z" /></svg>
+          </a>
+        </div>
+        <a href="#player" class="bg-gradient-to-r from-[#7C3AED] to-[#EC4899] hover:opacity-90 text-white font-extrabold text-[10px] uppercase tracking-widest px-4.5 py-2 rounded-full flex items-center gap-1.5 shadow-md active:scale-95 transition-all">
+          <span class="material-icons text-sm leading-none">play_arrow</span> AO VIVO
+        </a>
+        <button (click)="showAdminPanel.set(!showAdminPanel())" class="bg-[#111827] hover:bg-[#1A1F2E] text-slate-300 p-2.5 rounded-full transition-colors flex items-center justify-center border border-[#1A1F2E]" title="Painel Radialista">
+          <span class="material-icons text-sm leading-none">settings</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Admin Panel Drawer wrapper -->
+  @if (showAdminPanel()) {
+  <div class="bg-[#111827] border-b border-[#7C3AED]/20 text-white p-6 justify-center py-8 flex">
+    <div class="max-w-xl w-full bg-[#0B0F1A] p-6 sm:p-8 rounded-2xl border border-[#1A1F2E] shadow-2xl relative">
+      <div class="flex justify-between items-start mb-6">
+        <div>
+          <h3 class="text-xs font-black text-white uppercase tracking-widest flex items-center gap-2">
+            <span class="inline-block h-2 w-2 rounded-full bg-[#EC4899]"></span> PAINEL ADMINISTRATIVO RADIALISTA
+          </h3>
+          <p class="text-[11px] text-[#A1A1AA] mt-1 font-semibold">Espaço exclusivo de coordenação e postagem regional</p>
+        </div>
+        <button (click)="showAdminPanel.set(false)" class="text-[#A1A1AA] hover:text-white focus:outline-none" aria-label="Fechar">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+
+      @if (!isAdminAuthenticated()) {
+      <div>
+        <span class="block text-[10px] font-black uppercase tracking-widest text-[#A1A1AA] mb-2.5">AUTENTICAÇÃO EXCLUSIVA DE radialista</span>
+        <div class="flex gap-2">
+          <input [formControl]="adminPassphrase" (keydown.enter)="authenticateAdmin()" type="password" placeholder="Insira a sua senha secreta..." class="flex-1 bg-[#111827] border border-[#1A1F2E] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#7C3AED] text-xs font-medium" />
+          <button (click)="authenticateAdmin()" class="bg-[#4F46E5] hover:bg-[#7C3AED] text-white font-extrabold px-5 rounded-xl text-xs transition-colors uppercase tracking-wider flex items-center gap-1">
+            Entrar <span class="material-icons text-sm">login</span>
+          </button>
+        </div>
+        @if (adminError()) {
+        <p class="text-xs text-red-400 mt-2.5 flex items-center gap-1"><span class="material-icons text-xs">error_outline</span>{{ adminError() }}</p>
+        }
+      </div>
+      } @else {
+      <div class="space-y-6">
+        <div class="flex items-center justify-between border-b border-[#1A1F2E] pb-4">
+          <span class="text-xs font-bold text-[#00E5AB] flex items-center gap-2">
+            <span class="h-2 w-2 rounded-full bg-[#00E5AB] animate-pulse"></span> Radialista: Edmar Cardoso (Sintonizado)
+          </span>
+          <button (click)="logoutAdmin()" class="text-xs text-red-400 hover:text-red-500 font-extrabold uppercase tracking-widest">
+            Desconectar
+          </button>
+        </div>
+
+        <form [formGroup]="adminNewsForm" (ngSubmit)="submitNews()" class="space-y-4">
+          <h4 class="text-xs font-black uppercase tracking-widest text-[#7C3AED]">Escrever Boletim / Notícia</h4>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <span class="block text-[10px] font-black text-[#A1A1AA] uppercase mb-1.5">Título Curto</span>
+              <input formControlName="title" type="text" placeholder="Ex: Novo estúdio inaugurado" class="w-full bg-[#111827] border border-[#1A1F2E] rounded-lg px-3.5 py-2.5 text-white focus:outline-none focus:border-[#7C3AED] text-xs font-medium" />
+            </div>
+            <div>
+              <span class="block text-[10px] font-black text-[#A1A1AA] uppercase mb-1.5">Canal de Mídia</span>
+              <select formControlName="category" class="w-full bg-[#111827] border border-[#1A1F2E] rounded-lg px-3.5 py-2.5 text-white focus:outline-none focus:border-[#7C3AED] text-xs font-bold">
+                <option value="Novidades da Rádio">Novidades da Rádio</option>
+                <option value="Cultura & Tradição">Cultura & Tradição</option>
+                <option value="Agronegócio">Agronegócio</option>
+                <option value="Avisos do Interior">Avisos do Interior</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <span class="block text-[10px] font-black text-[#A1A1AA] uppercase mb-1.5">Resumo Curto (Subtítulo)</span>
+            <input formControlName="summary" type="text" placeholder="Resumo em uma frase..." class="w-full bg-[#111827] border border-[#1A1F2E] rounded-lg px-3.5 py-2.5 text-white focus:outline-none focus:border-[#7C3AED] text-xs font-medium" />
+          </div>
+
+          <div>
+            <span class="block text-[10px] font-black text-[#A1A1AA] uppercase mb-1.5">Corpo da Matéria</span>
+            <textarea formControlName="content" rows="4" placeholder="Escreva a notícia completa..." class="w-full bg-[#111827] border border-[#1A1F2E] rounded-lg px-3.5 py-2.5 text-white focus:outline-none focus:border-[#7C3AED] text-xs font-medium"></textarea>
+          </div>
+
+          <div>
+            <span class="block text-[10px] font-black text-[#A1A1AA] uppercase mb-1.5">Link da Foto (Opcional)</span>
+            <input formControlName="image" type="text" placeholder="URL da foto ou deixe vazio..." class="w-full bg-[#111827] border border-[#1A1F2E] rounded-lg px-3.5 py-2.5 text-white focus:outline-none focus:border-[#7C3AED] text-xs font-medium" />
+          </div>
+
+          <button type="submit" class="w-full bg-gradient-to-r from-[#7C3AED] to-[#EC4899] text-white font-black py-3 rounded-xl text-xs uppercase tracking-widest transition-opacity cursor-pointer">
+            Publicar Boletim Oficial
+          </button>
+        </form>
+      </div>
+      }
+    </div>
+  </div>
+  }
+
+  <!-- HERO BROADCAST PORTAL SECTION -->
+  <section id="inicio" class="relative overflow-hidden pt-10 pb-16 px-4 bg-[#080A15] bg-clean-dots">
+    <!-- Atmospheric studio styling flares -->
+    <div class="absolute top-1/4 left-1/4 h-[350px] w-[350px] bg-[#7C3AED]/8 rounded-full blur-3xl pointer-events-none animate-pulse-slow"></div>
+    <div class="absolute bottom-1/4 right-1/4 h-[400px] w-[400px] bg-[#EC4899]/6 rounded-full blur-3xl pointer-events-none animate-pulse-slow"></div>
+
+    <div class="max-w-7xl mx-auto space-y-8 relative z-10">
+      
+      <!-- PLAYER PANEL DECK: MAJOR LANDING COMPONENT -->
+      <div id="deck-principal" class="bg-[#111625]/90 border border-white/5 rounded-3xl p-6 sm:p-8 flex flex-col lg:flex-row items-center justify-between gap-8 shadow-xl relative overflow-hidden group hover:border-[#7C3AED]/25 transition-all">
+        <!-- Visual light effects -->
+        <div class="absolute bottom-0 right-0 h-48 w-48 bg-[#EC4899]/5 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute top-0 left-0 h-48 w-48 bg-[#7C3AED]/5 rounded-full blur-3xl pointer-events-none"></div>
+
+        <!-- Copy and controls column -->
+        <div class="flex-1 text-left space-y-6 w-full lg:max-w-xl">
+          <div class="space-y-2">
+            <span class="text-[10px] text-[#00E5AB] font-black uppercase tracking-widest text-glow-turquoise flex items-center gap-1">
+              <span class="h-1.5 w-1.5 rounded-full bg-[#00E5AB] animate-ping"></span> ESTÁ NO AR AGORA
+            </span>
+            <h2 class="text-3xl sm:text-4xl font-black text-white leading-tight uppercase">
+              A RÁDIO QUE TOCA <br/>
+              <span class="bg-gradient-to-r from-[#00E5AB] via-[#7C3AED] to-[#EC4899] bg-clip-text text-transparent text-glow-neon">COM VOCÊ!</span>
+            </h2>
+            <p class="text-[#A1A1AA] text-xs sm:text-sm font-semibold leading-relaxed">
+              Música, informação, cultura e muita interação pra deixar o seu dia muito melhor! Se junte à maior bancada digital da nossa microrregião.
+            </p>
+          </div>
+
+          <!-- CTAs Controls linked to audio backend and forms -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <button (click)="togglePlay()" class="flex-1 sm:flex-initial bg-gradient-to-r from-[#7C3AED] to-[#EC4899] hover:opacity-90 active:scale-98 text-white font-black px-8 py-3.5 rounded-full shadow-lg transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-widest border-glow-magenta border-none cursor-pointer">
+              <!-- Play state logic display -->
+              @if (isConnecting()) {
+                <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>CONECTANDO...</span>
+              } @else {
+                <span class="material-icons text-sm">{{ isPlaying() ? 'pause' : 'play_arrow' }}</span>
+                <span>{{ isPlaying() ? 'PAUSAR TRANSMISSÃO' : 'OUVIR AO VIVO' }}</span>
+              }
+            </button>
+            <a href="#recados" class="flex-1 sm:flex-initial bg-[#1F2943]/60 hover:bg-[#7C3AED]/20 border border-[#7C3AED]/35 hover:border-[#7C3AED]/60 text-white font-black px-8 py-3.5 rounded-full transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-widest leading-none">
+              <span class="material-icons text-sm text-[#7C3AED]">music_note</span> PEDIR MÚSICA DE CORAÇÃO
+            </a>
+          </div>
+
+          <!-- Quick statistics row mirroring the bottom of the second mockup layout -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 border-t border-white/5 pt-5 text-slate-300">
+            <!-- Stat 1 -->
+            <div class="flex items-center gap-2.5">
+              <div class="h-9 w-9 bg-[#00E5AB]/10 text-[#00E5AB] rounded-full flex items-center justify-center shrink-0 border border-[#00E5AB]/15">
+                <span class="material-icons text-base">headset</span>
+              </div>
+              <div class="leading-none text-left">
+                <p class="text-xs font-black text-white">{{ listenerCount() }}</p>
+                <p class="text-[9px] text-[#A1A1AA] uppercase tracking-wider font-semibold mt-0.5">ouvintes online</p>
+              </div>
+            </div>
+            <!-- Stat 2 -->
+            <div class="flex items-center gap-2.5">
+              <div class="h-9 w-9 bg-[#7C3AED]/10 text-[#7C3AED] rounded-full flex items-center justify-center shrink-0 border border-[#7C3AED]/15">
+                <span class="material-icons text-base">radio</span>
+              </div>
+              <div class="leading-none text-left">
+                <p class="text-xs font-black text-white">24H</p>
+                <p class="text-[9px] text-[#A1A1AA] uppercase tracking-wider font-semibold mt-0.5">no ar</p>
+              </div>
+            </div>
+            <!-- Stat 3 -->
+            <div class="flex items-center gap-2.5">
+              <div class="h-9 w-9 bg-[#EC4899]/10 text-[#EC4899] rounded-full flex items-center justify-center shrink-0 border border-[#EC4899]/15">
+                <span class="material-icons text-base">settings_voice</span>
+              </div>
+              <div class="leading-none text-left">
+                <p class="text-xs font-black text-white">Variada</p>
+                <p class="text-[9px] text-[#A1A1AA] uppercase tracking-wider font-semibold mt-0.5">programação</p>
+              </div>
+            </div>
+            <!-- Stat 4 -->
+            <div class="flex items-center gap-2.5">
+              <div class="h-9 w-9 bg-[#00E5AB]/10 text-[#00E5AB] rounded-full flex items-center justify-center shrink-0 border border-[#4F46E5]/15">
+                <span class="material-icons text-base">favorite</span>
+              </div>
+              <div class="leading-none text-left">
+                <p class="text-xs font-black text-white">Própria</p>
+                <p class="text-[9px] text-[#A1A1AA] uppercase tracking-wider font-semibold mt-0.5">feita pra você</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Graphic container with host and capsule status -->
+        <div class="relative w-full lg:w-[380px] shrink-0 rounded-3xl overflow-hidden shadow-lg border border-white/5">
+          <!-- Image shown in full — defines the container height -->
+          <img src="/edimar.png" alt="Edmar Direct Studio" class="w-full h-auto block bg-slate-900 group-hover:scale-[1.01] transition-transform duration-700" referrerpolicy="no-referrer" />
+
+          <!-- Overlays and badges on top of the image -->
+          <div class="absolute inset-0 flex flex-col justify-between p-6">
+            <!-- Gradient overlay -->
+            <div class="absolute inset-0 bg-gradient-to-b from-[#0F1321]/40 via-transparent to-[#0F1321]/95 animate-pulse-slow"></div>
+
+            <!-- Top Row tags -->
+            <div class="flex justify-between items-start w-full relative z-10 select-none">
+              <div class="bg-red-600 text-white font-mono text-[9px] font-black px-2.5 py-1 rounded shadow-lg uppercase tracking-widest text-glow-magenta border border-red-500 animate-pulse flex items-center gap-1">
+                <span class="inline-block h-1.5 w-1.5 bg-white rounded-full"></span> NO AR
+              </div>
+              <span class="bg-[#0F1321]/80 backdrop-blur-sm text-[#00E5AB] text-[8px] font-black px-2 py-1 rounded-md uppercase tracking-widest border border-[#00E5AB]/20">Estúdio Digital</span>
+            </div>
+
+            <!-- Bottom details block -->
+            <div class="relative z-10 w-full text-left space-y-2.5 bg-gradient-to-t from-black/85 via-black/40 to-transparent p-4 rounded-b-2xl">
+              <div class="space-y-0.5">
+                <h3 class="text-base font-black text-white tracking-widest uppercase">EDMAR CARDOSO</h3>
+                <p class="text-[10px] text-[#EC4899] font-black uppercase tracking-wider">A sua companhia diária!</p>
+              </div>
+              <div class="inline-flex items-center gap-2 bg-[#D1307A] text-white text-[9px] font-black px-3.5 py-1.5 rounded-full shadow-lg border border-white/20 animate-pulse">
+                <span class="h-2 w-2 rounded-full bg-white animate-ping"></span>
+                <span>AO VIVO AGORA</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONSOLIDATED TWO-COLUMN DASHBOARD (Programa de Hoje + Notícias Highlights) -->
+  <section class="max-w-7xl mx-auto py-16 px-4 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    
+    <!-- Left: Program list (5 Columns) -->
+    <div class="lg:col-span-5 space-y-6">
+      <div class="flex items-center justify-between border-b border-[#1A1F2E] pb-3 text-left">
+        <div class="flex items-center gap-2">
+          <span class="material-icons text-[#7C3AED] text-lg">calendar_today</span>
+          <h3 class="text-sm font-black uppercase tracking-widest text-[#A1A1AA]">PROGRAMAÇÃO DE HOJE</h3>
+        </div>
+        <a href="#programacao" class="text-[9px] font-black text-[#7C3AED] hover:text-[#EC4899] uppercase tracking-widest transition-colors">
+          Ver grade completa →
+        </a>
+      </div>
+
+      <div class="space-y-3.5 text-left" id="sintonia-hourly-feed">
+        @for (p of (selectedScheduleDay() === 'seg-sex' ? scheduleSegSex() : (selectedScheduleDay() === 'sab' ? scheduleSab() : scheduleDom())).slice(0, 4); track p.id) {
+        <div class="bg-[#111827] border border-[#1A1F2E] hover:border-[#7C3AED]/30 p-4 rounded-2xl transition-all relative overflow-hidden group">
+          @if (currentlyOnAir().id === p.id) {
+          <div class="absolute top-0 right-0 bg-gradient-to-l from-[#7C3AED] to-[#EC4899] text-white text-[8px] uppercase font-bold px-2.5 py-1 rounded-bl-lg tracking-widest animate-pulse flex items-center gap-1 shadow-sm">
+            <span class="inline-block w-1 h-1 rounded-full bg-white"></span> NO AR
+          </div>
+          }
+
+          <div class="flex items-start gap-3.5">
+            <div class="h-10 w-10 rounded-full flex-shrink-0 bg-[#2A134D] border border-[#7C3AED]/30 flex items-center justify-center font-bold text-[#EC4899] text-xs">
+              {{ p.host.substring(0,2).toUpperCase() }}
+            </div>
+            
+            <div class="flex-1 min-w-0 space-y-0.5">
+              <span class="text-[9px] font-bold text-[#7C3AED] font-mono block">{{ p.timeRange }}</span>
+              <h4 class="text-xs font-bold text-white group-hover:text-[#EC4899] transition-colors truncate">{{ p.title }}</h4>
+              <p class="text-[10px] text-[#A1A1AA] leading-relaxed truncate">Com {{ p.host }}</p>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+
+    <!-- Right: News Highlights (7 Columns) -->
+    <div class="lg:col-span-7 space-y-6">
+      <div class="flex items-center justify-between border-b border-[#1A1F2E] pb-3 text-left">
+        <div class="flex items-center gap-2">
+          <span class="material-icons text-[#EC4899] text-lg">newspaper</span>
+          <h3 class="text-sm font-black uppercase tracking-widest text-[#A1A1AA]">NOTÍCIAS DIGITAIS</h3>
+        </div>
+        <a href="#noticias" class="text-[9px] font-black text-[#EC4899] hover:text-[#7C3AED] uppercase tracking-widest transition-colors">
+          Ver todas as notícias →
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left" id="news-grid-short-list">
+        @for (news of newsList().slice(0, 2); track news.id) {
+        <button (click)="incrementNewsViews(news)" class="bg-[#111827] border border-[#1A1F2E] hover:border-[#EC4899]/30 rounded-2xl overflow-hidden shadow-sm transition-all text-left group focus:outline-none flex flex-col justify-between h-full">
+          <div>
+            <div class="relative h-36 w-full bg-[#1A1F2E] overflow-hidden">
+              <img [src]="news.image" alt="Notícia Imagem" class="w-full h-full object-cover group-hover:scale-103 transition-transform duration-700" referrerpolicy="no-referrer" />
+              <span class="absolute top-3 left-3 bg-[#EC4899] text-white text-[8px] font-black uppercase px-2 py-0.5 rounded shadow-sm">
+                {{ news.category }}
+              </span>
+            </div>
+
+            <div class="p-5 space-y-2">
+              <span class="font-mono text-[9px] font-bold text-[#A1A1AA]">{{ news.date }}</span>
+              <h4 class="font-bold text-white group-hover:text-[#EC4899] transition-colors leading-snug line-clamp-2 text-xs">{{ news.title }}</h4>
+              <p class="text-[11px] text-[#A1A1AA] line-clamp-3 leading-relaxed font-semibold">{{ news.summary }}</p>
+            </div>
+          </div>
+
+          <div class="p-5 pt-0 flex justify-between items-center text-[9px] text-[#A1A1AA] font-bold mt-2">
+            <span class="flex items-center gap-1"><span class="material-icons text-xs leading-none">visibility</span> {{ news.views }}</span>
+            <span class="text-[#EC4899] group-hover:translate-x-1 transition-transform inline-flex items-center gap-1 uppercase tracking-wider text-[8px]">Ler mais →</span>
+          </div>
+        </button>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- PERSISTENT BROADCASTING / TRACK CONTROL SYSTEM (Core station audio deck holding srvvox iframe) -->
+  <section id="player" class="py-20 bg-[#1A1F2E] border-t border-b border-[#1A1F2E] text-white overflow-hidden relative">
+    <div class="absolute -top-32 -left-32 h-[350px] w-[350px] bg-[#7C3AED]/5 rounded-full blur-3xl pointer-events-none"></div>
+    
+    <div class="max-w-4xl mx-auto px-4 relative z-10 text-center">
+      <div class="space-y-2 mb-10">
+        <span class="text-[10px] text-[#00E5AB] font-black uppercase tracking-widest text-glow-turquoise">SINTONIA BROADCAST DIGITAL</span>
+        <h2 class="text-3xl font-black text-white tracking-tight">Estação Principal de Alta Fidelidade</h2>
+        <p class="text-xs text-[#A1A1AA] max-w-md mx-auto leading-relaxed">Conecte-se ao sinal digital purificado 24h sem ruídos utilizando o reprodutor estúdio e os acopladores abaixo:</p>
+      </div>
+
+      <div class="bg-[#111827] border border-[#1A1F2E] rounded-3xl p-6 sm:p-8 shadow-clean space-y-6">
+        @if (playError()) {
+        <div class="bg-red-950/40 border border-red-500/30 text-red-200 p-4 rounded-xl text-xs flex gap-2.5 items-center text-left">
+          <span class="material-icons text-red-400 text-sm leading-none">error_outline</span>
+          <p class="flex-1 font-semibold leading-relaxed">{{ playError() }}</p>
+          <button (click)="playError.set(null)" class="text-slate-400 hover:text-white focus:outline-none"><span class="material-icons text-xs leading-none">close</span></button>
+        </div>
+        }
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+          
+          <!-- Left Specs & Equalizer visualizer -->
+          <div class="lg:col-span-5 flex flex-col justify-between bg-[#0B0F1A] p-5 rounded-2xl border border-[#1A1F2E] text-left gap-4">
+            <div class="space-y-2">
+              <span class="bg-[#2A134D] text-[#00E5AB] text-[8px] font-black tracking-wider uppercase px-2 py-0.5 rounded inline-block">SINAL PRINCIPAL HD</span>
+              <h3 class="text-xs font-black text-white uppercase tracking-widest">A SINTONIA DO EDMAR CARDOSO</h3>
+              <p class="text-[11px] text-[#A1A1AA] leading-relaxed font-semibold">Uso sofisticado de modulação digital buscando disponibilizar o áudio regional livre de ruídos 24 horas por dia.</p>
+            </div>
+
+            <div class="space-y-1.5">
+              <p class="text-[8px] text-[#A1A1AA] uppercase tracking-widest font-black flex items-center gap-1">
+                <span class="material-icons text-[10px] leading-none text-[#7C3AED]">graphic_eq</span> MONITOR FREGUÊNCIA DO REPRODUTOR
+              </p>
+              <div class="w-full h-11 bg-[#05070D] rounded-xl border border-[#1A1F2E] overflow-hidden shadow-inner">
+                <canvas #visualizerCanvas class="w-full h-full block"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Secure Web Radio Iframe framework handler (7 Columns) -->
+          <div class="lg:col-span-7 flex flex-col justify-center bg-[#0B0F1A] rounded-2xl p-5 sm:p-6 border border-[#1A1F2E] text-left relative overflow-hidden gap-4">
+            <div class="absolute -top-10 -right-10 h-32 w-32 bg-[#EC4899]/5 rounded-full blur-2xl pointer-events-none"></div>
+
+            <div class="flex justify-between items-center border-b border-[#1A1F2E] pb-2.5">
+              <div class="flex items-center gap-1.5 text-[8px] uppercase tracking-widest font-black text-[#A1A1AA]">
+                <span class="inline-block h-1.5 w-1.5 rounded-full bg-[#00E5AB] animate-pulse"></span>
+                <span>ONLINE AUDIO DECK</span>
+              </div>
+              <span class="text-[8px] font-mono font-bold text-[#A1A1AA] tracking-wider">128 KBPS AAC Stereo</span>
+            </div>
+
+            <p class="text-xs font-bold text-white">Inicie sua sintonia ao vivo utilizando o reprodutor estúdio:</p>
+
+            <div class="bg-[#111827] p-4 rounded-xl border border-[#1A1F2E] shadow-inner space-y-3">
+              <div class="flex justify-between items-center text-[9px] font-mono text-[#A1A1AA] font-black px-0.5">
+                <span class="flex items-center gap-1"><span class="material-icons text-xs text-[#7C3AED]">play_circle_filled</span> REPRODUTOR INTEGRADO</span>
+                <span class="text-[#00E5AB] font-black uppercase">Sinal Ativo</span>
+              </div>
+              
+              <div class="h-10 w-full overflow-hidden rounded bg-[#0B0F1A] border border-[#1A1F2E] transition-all flex items-center justify-center">
+                <iframe src="https://player.srvvox.com.br/player-barra/7080/000000" frameborder="0" width="100%" height="31" class="block"></iframe>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 text-[10px] text-[#A1A1AA] bg-[#111827]/40 p-2.5 rounded-lg border border-[#1A1F2E] font-semibold leading-relaxed">
+              <span class="material-icons text-[#EC4899] text-xs leading-none">info_outline</span>
+               <span>Caso o áudio não inicie automaticamente em seu dispositivo, certifique-se de sintonizar no player acoplado acima.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Alternate demo tracks toggle section -->
+        <div class="border-t border-[#1A1F2E] pt-5 mt-2 text-left">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+            <div>
+              <h4 class="text-xs font-black uppercase tracking-widest text-[#A1A1AA] flex items-center gap-1">
+                <span class="material-icons text-sm text-[#7C3AED]">album</span> trilhas alternativas / demonstração local
+              </h4>
+              <p class="text-[10px] text-[#A1A1AA] font-semibold mt-0.5">Clique em uma trilha de alta fidelidade para exercitar e escutar no visualizador local:</p>
+            </div>
+
+            @if (currentTrackIndex() > -1 && isPlaying() && !currentTrack().isLive) {
+            <div class="flex items-center gap-3 bg-[#0B0F1A] px-3.5 py-1.5 rounded-full border border-[#1A1F2E]">
+              <button (click)="toggleMute()" class="text-slate-400 hover:text-[#7C3AED] transition-colors focus:outline-none" [title]="isMuted() ? 'Tirar Mudo' : 'Mutar Volume'">
+                <span class="material-icons text-sm leading-none">
+                  {{ isMuted() || currentVolume() === 0 ? 'volume_off' : (currentVolume() < 0.4 ? 'volume_down' : 'volume_up') }}
+                </span>
+              </button>
+              <input type="range" min="0" max="1" step="0.05" [value]="isMuted() ? 0 : currentVolume()" (input)="setVolume($event)" class="w-16 h-1 bg-[#111827] rounded-full cursor-pointer" title="Slider" />
+            </div>
+            }
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5" id="sintonia-selector">
+            @for (tk of tracks(); track tk.id; let i = $index) {
+            <button (click)="selectTrack(i)" class="p-3 text-left rounded-xl transition-all flex items-center justify-between cursor-pointer focus:outline-none border" [ngClass]="currentTrackIndex() === i && isPlaying() && !currentTrack().isLive ? 'bg-gradient-to-r from-[#7C3AED] to-[#EC4899] text-white font-extrabold border-transparent shadow-lg' : 'bg-[#111827] hover:bg-[#1A1F2E] text-slate-300 border-[#1A1F2E]'">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <div class="h-7 w-7 rounded bg-[#0B0F1A] flex items-center justify-center flex-shrink-0" [ngClass]="currentTrackIndex() === i && isPlaying() && !currentTrack().isLive ? 'bg-white/20 text-white' : 'text-[#7C3AED]'">
+                  <span class="material-icons text-xs leading-none">play_arrow</span>
+                </div>
+                <div class="min-w-0 pr-1">
+                  <p class="text-xs truncate font-bold leading-tight">{{ tk.title }}</p>
+                  <p class="text-[9px] font-bold opacity-80 mt-0.5 truncate">{{ tk.artist }}</p>
+                </div>
+              </div>
+              <span class="material-icons text-xs opacity-60 leading-none">audiotrack</span>
+            </button>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BIOGRAPHY / ABOUT EDMAR CARDOSO -->
+  <section id="sobre" class="py-20 px-4 max-w-7xl mx-auto space-y-12">
+
+    <!-- Banner header -->
+    <div class="w-full rounded-3xl overflow-hidden shadow-lg">
+      <img src="/banner.png" alt="Campos Belos Digital" class="w-full h-auto block" referrerpolicy="no-referrer" />
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-16 items-center">
+    <div class="space-y-6 text-left">
+      <div class="inline-flex items-center gap-3 bg-[#2A134D] border border-[#7C3AED]/30 py-1.5 px-4 rounded-full text-[10px] text-white font-black uppercase tracking-widest">
+        <span class="material-icons text-xs leading-none">history_edu</span> HISTÓRIA E COMPROMISSO
+      </div>
+      
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+        A história por trás do microfone de <span class="bg-gradient-to-r from-[#7C3AED] to-[#EC4899] bg-clip-text text-transparent">Edmar Cardoso</span>
+      </h2>
+      
+      <div class="text-[#E5E7EB] space-y-4 text-xs sm:text-sm leading-relaxed font-semibold">
+        <p>
+          Edmar Cardoso traz no peito uma paixão inabalável pela comunicação clara e de proximidade. Com anos de dedicação na área do jornalismo, entretenimento e cultura regional, Edmar começou sua jornada carregando o compromisso de escutar as pessoas, unindo o bate-papo de qualidade, a boa música regional e os causos alegres do cotidiano.
+        </p>
+        <p>
+          A rádio sintoniza o calor de uma transmissão viva, profissional e sutilmente desenhada para embalar sua rotina. Nosso estúdio digital atua como um polo de inovação na transmissão pela internet com alta fidelidade e conectividade instantânea.
+        </p>
+        <p class="italic text-[#A1A1AA] border-l-2 border-[#7C3AED] pl-3">
+          "A comunicação bem feita aproxima distâncias de forma mágica. O rádio digital aproxima o ouvinte das nossas principais pautas com som de estúdio a qualquer hora do dia", expressa Edmar Cardoso.
+        </p>
+      </div>
+
+      <!-- Quick Metrics -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-[#1A1F2E] text-center sm:text-left">
+        <div>
+          <h4 class="text-2xl font-black text-[#7C3AED]">25+</h4>
+          <p class="text-[9px] text-[#A1A1AA] uppercase tracking-widest font-black mt-0.5">Anos de Rádio</p>
+        </div>
+        <div>
+          <h4 class="text-2xl font-black text-[#EC4899]">10k+</h4>
+          <p class="text-[9px] text-[#A1A1AA] uppercase tracking-widest font-black mt-0.5">Dedicatórias</p>
+        </div>
+        <div>
+          <h4 class="text-2xl font-black text-[#00E5AB]">50k+</h4>
+          <p class="text-[9px] text-[#A1A1AA] uppercase tracking-widest font-black mt-0.5">Músicas Tocadas</p>
+        </div>
+        <div>
+          <h4 class="text-2xl font-black text-white">Digital</h4>
+          <p class="text-[9px] text-[#A1A1AA] uppercase tracking-widest font-black mt-0.5">Som Sem Ruído</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Quote Block -->
+    <div class="relative max-w-lg mx-auto w-full">
+      <div class="absolute -inset-2 bg-gradient-to-r from-[#7C3AED] to-[#EC4899] rounded-2xl blur-lg opacity-10"></div>
+      
+      <div class="relative bg-[#111827] border border-[#1A1F2E] rounded-3xl p-6 sm:p-10 shadow-clean space-y-6 text-left">
+        <span class="material-icons text-5xl text-[#7C3AED]/15 block leading-none">format_quote</span>
+        
+        <blockquote class="text-[#E5E7EB] text-sm leading-relaxed italic font-semibold">
+          "Sintonizar no calor de uma transmissão viva é o que aproxima as pessoas em nosso município. Esse portal foi construído em alta resolução para que todos ouçam e se divirtam juntos."
+        </blockquote>
+
+        <div class="flex items-center gap-3.5 border-t border-[#1A1F2E] pt-5">
+          <div class="h-10 w-10 bg-[#7C3AED] rounded-full flex items-center justify-center font-bold text-white select-none">
+            EC
+          </div>
+          <div>
+            <h5 class="text-xs font-bold text-white leading-tight">Edmar Cardoso</h5>
+            <p class="text-[9px] text-[#7C3AED] font-black uppercase tracking-wider">Radialista & Diretor</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <!-- INTERACTIVE WEEKLY SCHEDULE SWITCHER -->
+  <section id="programacao" class="bg-[#111827] border-t border-b border-[#1A1F2E] py-20 px-4">
+    <div class="max-w-7xl mx-auto space-y-12">
+      <div class="text-center space-y-2">
+        <span class="text-[10px] text-[#7C3AED] font-black uppercase tracking-widest">GRADE SEMANAL COMPLETA</span>
+        <h2 class="text-3xl font-black text-white tracking-tight">Grade de Programação dos Canais</h2>
+        <p class="text-[#A1A1AA] text-xs max-w-sm mx-auto leading-relaxed">Selecione o período ideal ou acompanhe os encontros diários da nossa bancada:</p>
+      </div>
+
+      <div class="flex justify-center items-center gap-2">
+        <button (click)="selectedScheduleDay.set('seg-sex')" class="px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all cursor-pointer focus:outline-none" [ngClass]="selectedScheduleDay() === 'seg-sex' ? 'bg-[#7C3AED] text-white border-transparent shadow-lg' : 'bg-[#0B0F1A] text-[#A1A1AA] border-[#1A1F2E] hover:bg-[#111827]'">
+          Segunda a Sexta
+        </button>
+        <button (click)="selectedScheduleDay.set('sab')" class="px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all cursor-pointer focus:outline-none" [ngClass]="selectedScheduleDay() === 'sab' ? 'bg-[#7C3AED] text-white border-transparent shadow-lg' : 'bg-[#0B0F1A] text-[#A1A1AA] border-[#1A1F2E] hover:bg-[#111827]'">
+          Sábado
+        </button>
+        <button (click)="selectedScheduleDay.set('dom')" class="px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all cursor-pointer focus:outline-none" [ngClass]="selectedScheduleDay() === 'dom' ? 'bg-[#7C3AED] text-white border-transparent shadow-lg' : 'bg-[#0B0F1A] text-[#A1A1AA] border-[#1A1F2E] hover:bg-[#111827]'">
+          Domingo
+        </button>
+      </div>
+
+      <!-- Optimized unified schedule list loop -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (p of (selectedScheduleDay() === 'seg-sex' ? scheduleSegSex() : (selectedScheduleDay() === 'sab' ? scheduleSab() : scheduleDom())); track p.id) {
+        <div class="bg-[#0B0F1A] p-6 rounded-2xl border border-[#1A1F2E] hover:border-[#7C3AED]/30 transition-all text-left flex flex-col justify-between relative overflow-hidden group">
+          @if (currentlyOnAir().id === p.id) {
+          <div class="absolute top-0 right-0 bg-[#EC4899] text-white text-[8px] uppercase font-bold px-3 py-1.5 rounded-bl-xl tracking-widest animate-pulse flex items-center gap-1">
+            <span class="inline-block w-1.5 h-1.5 rounded-full bg-white"></span> NO AR
+          </div>
+          }
+          <div class="space-y-4">
+            <div class="flex items-center gap-1.5 text-[#7C3AED] font-mono text-xs font-bold">
+              <span class="material-icons text-sm leading-none">alarm</span>
+              <span>{{ p.timeRange }}</span>
+            </div>
+            <div>
+              <h3 class="text-sm font-bold text-white group-hover:text-[#EC4899] transition-colors leading-snug">{{ p.title }}</h3>
+              <p class="text-[10px] text-[#A1A1AA] font-bold mt-1">Apresentador: <strong class="text-slate-350">{{ p.host }}</strong></p>
+            </div>
+            <p class="text-[11px] text-[#A1A1AA] leading-relaxed font-semibold">{{ p.description }}</p>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- MURAL INTERATIVO DE RECADOS Form and Board -->
+  <section id="recados" class="py-20 px-4 bg-[#0B0F1A]">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-16 items-start">
+      
+      <!-- Submissions Form -->
+      <div class="space-y-6 text-left">
+        <div class="inline-flex items-center gap-2 bg-[#2A134D] border border-[#7C3AED]/30 py-1.5 px-3.5 rounded-full text-[10px] text-white font-black uppercase tracking-widest">
+          <span class="material-icons text-xs leading-none">hearing</span> MURAL INTERATIVO AO VIVO
+        </div>
+        <h2 class="text-3xl font-extrabold text-white tracking-tight">Mande seu abraço e peça suas músicas</h2>
+        <p class="text-[#A1A1AA] text-xs sm:text-sm leading-relaxed font-medium">
+          Deseja saudar seus amigos ou pedir sua música favorita? Complete os dados de contato abaixo. Edmar Cardoso e toda a bancada lerão seu recado na transmissão!
+        </p>
+
+        <form [formGroup]="recadoForm" (ngSubmit)="sendRecado()" class="bg-[#111827] p-6 sm:p-8 rounded-3xl border border-[#1A1F2E] space-y-4 shadow-clean">
+          <p class="text-xs font-black text-[#EC4899] uppercase tracking-widest border-b border-[#1A1F2E] pb-3 flex items-center gap-1.5"><span class="material-icons text-sm">edit_note</span> ESCREVER ABRAÇO / MURAL</p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <span class="block text-[10px] font-black text-[#A1A1AA] uppercase mb-1.5">Seu Nome / Apelido</span>
+              <input formControlName="name" type="text" placeholder="Ex: Chico da Estância" class="w-full bg-[#0B0F1A] border border-[#1A1F2E] rounded-lg px-3.5 py-2.5 text-white focus:outline-none focus:border-[#7C3AED] text-xs font-semibold" />
+              @if (recadoForm.get('name')?.touched && recadoForm.get('name')?.invalid) {
+              <p class="text-[9px] text-[#EC4899] mt-1 font-bold">Campo obrigatório.</p>
+              }
+            </div>
+            <div>
+              <span class="block text-[10px] font-black text-[#A1A1AA] uppercase mb-1.5">Cidade ou Região</span>
+              <input formControlName="city" type="text" placeholder="Ex: Campos Belos - GO" class="w-full bg-[#0B0F1A] border border-[#1A1F2E] rounded-lg px-3.5 py-2.5 text-white focus:outline-none focus:border-[#7C3AED] text-xs font-semibold" />
+              @if (recadoForm.get('city')?.touched && recadoForm.get('city')?.invalid) {
+              <p class="text-[9px] text-[#EC4899] mt-1 font-bold">Cidade obrigatória.</p>
+              }
+            </div>
+          </div>
+
+          <div>
+            <span class="block text-[10px] font-black text-[#A1A1AA] uppercase mb-1.5">Qual música deseja ouvir hoje?</span>
+            <input formControlName="requestedSong" type="text" placeholder="Ex: Nova canção ou lofi..." class="w-full bg-[#0B0F1A] border border-[#1A1F2E] rounded-lg px-3.5 py-2.5 text-white focus:outline-none focus:border-[#7C3AED] text-xs font-semibold" />
+            @if (recadoForm.get('requestedSong')?.touched && recadoForm.get('requestedSong')?.invalid) {
+            <p class="text-[9px] text-[#EC4899] mt-1 font-bold">Música obrigatória.</p>
+            }
+          </div>
+
+          <div>
+            <span class="block text-[10px] font-black text-[#A1A1AA] uppercase mb-1.5">Sua Mensagem ou Dedicatória</span>
+            <textarea formControlName="message" rows="3" placeholder="Insira seu recado carinhoso para transmitir no programa..." class="w-full bg-[#0B0F1A] border border-[#1A1F2E] rounded-lg px-3.5 py-2.5 text-white focus:outline-none focus:border-[#7C3AED] text-xs font-semibold"></textarea>
+            @if (recadoForm.get('message')?.touched && recadoForm.get('message')?.invalid) {
+            <p class="text-[9px] text-[#EC4899] mt-1 font-bold">Mensagem obrigatória (mín. 4 caract.).</p>
+            }
+          </div>
+
+          <button type="submit" class="w-full bg-gradient-to-r from-[#7C3AED] to-[#EC4899] text-white font-black py-4 px-4 rounded-xl text-xs uppercase tracking-widest transition-opacity shadow-md flex items-center justify-center gap-2 cursor-pointer border-glow-magenta border-none">
+            Mandar Abraço ao Vivo <span class="material-icons text-sm">send</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Messages list columns -->
+      <div class="space-y-6 text-left">
+        <div class="flex justify-between items-center border-[#1A1F2E] border-b pb-3">
+          <h3 class="text-xs font-black uppercase tracking-widest text-[#A1A1AA] flex items-center gap-1.5">
+            <span class="material-icons text-sm text-[#7C3AED]">wysiwyg</span> Recados Recentes do Povo
+          </h3>
+          <span class="bg-[#2A134D] text-[#00E5AB] text-[8px] font-black tracking-widest px-2.5 py-1 rounded uppercase">Mural Ativo</span>
+        </div>
+
+        <div class="space-y-4 max-h-[510px] overflow-y-auto pr-2" id="recados-feed-list">
+          @if (messages().length === 0) {
+          <div class="bg-[#111827] rounded-2xl p-8 border border-[#1A1F2E] text-center text-[#A1A1AA] space-y-2">
+            <span class="material-icons text-4xl">mark_chat_read</span>
+            <p class="text-xs">Nenhum abraço em espera. Mande o primeiro!</p>
+          </div>
+          }
+
+          @for (msg of messages(); track msg.id) {
+          <div class="bg-[#111827] border border-[#1A1F2E] hover:border-[#7C3AED]/20 p-5 rounded-2xl shadow-xs transition-colors relative group">
+            <button (click)="deleteMessage(msg.id)" class="absolute top-4 right-4 text-[#A1A1AA] hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity focus:outline-none" title="Remover mensagem">
+              <span class="material-icons text-sm">delete_outline</span>
+            </button>
+
+            <div class="flex items-center gap-2.5 mb-2.5">
+              <div class="h-8 w-8 rounded-full bg-[#1A1F2E] text-[#00E5AB] border border-[#7C3AED]/20 font-bold text-xs flex items-center justify-center select-none font-sans">
+                {{ msg.name.substring(0, 1).toUpperCase() }}
+              </div>
+              <div>
+                <h4 class="text-xs font-bold text-white leading-tight">{{ msg.name }}</h4>
+                <p class="text-[9px] text-[#A1A1AA] font-bold flex items-center gap-1"><span class="material-icons text-[10px] text-[#00E5AB]">place</span>{{ msg.city }}</p>
+              </div>
+            </div>
+
+            <p class="text-xs text-[#E5E7EB] leading-relaxed pl-1 pb-3 italic font-semibold">"{{ msg.message }}"</p>
+
+            <div class="bg-[#0B0F1A] rounded-xl p-2.5 border border-[#1A1F2E] flex items-center justify-between text-[9px] text-[#A1A1AA] font-bold">
+              <p class="flex items-center gap-1 truncate pl-0.5 shrink-0 max-w-[210px]"><span class="material-icons text-xs text-[#7C3AED] leading-none">music_note</span> Quero ouvir: <strong class="text-[#00E5AB] font-bold">{{ msg.requestedSong }}</strong></p>
+              
+              <div class="flex items-center gap-3">
+                <span class="text-[8px] font-mono opacity-80 shrink-0">{{ msg.timestamp }}</span>
+                <button (click)="likeMessage(msg.id, $event)" class="hover:text-[#EC4899] flex items-center gap-0.5 cursor-pointer">
+                  <span class="material-icons text-xs leading-none text-[#EC4899]">favorite</span>{{ msg.likes }}
+                </button>
+              </div>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECENT BLOG & NOTÍCIAS SECTIONS -->
+  <section id="noticias" class="max-w-7xl mx-auto py-20 px-4">
+    <div class="text-center space-y-2 mb-12">
+      <span class="text-[10px] text-[#EC4899] font-black uppercase tracking-widest pl-0.5">BOLETIM INFORMATIVO REGIONAL</span>
+      <h2 class="text-3xl font-black text-white tracking-tight">Painel de Notícias Digitais</h2>
+      <p class="text-[#A1A1AA] text-xs max-w-sm mx-auto leading-relaxed">Mantenha-se atualizado com boletins oficiais do interior e utilidades públicas sintonizadas:</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="news-grid-list">
+      @for (news of newsList(); track news.id) {
+      <button type="button" (click)="incrementNewsViews(news)" class="text-left w-full bg-[#111827] border border-[#1A1F2E] hover:border-[#EC4899]/30 rounded-2xl overflow-hidden transition-all flex flex-col justify-between shadow-sm group focus:outline-none cursor-pointer">
+        <div class="space-y-4 w-full">
+          <div class="relative h-44 w-full bg-[#1A1F2E] overflow-hidden">
+            <img [src]="news.image" alt="Notícias Thumbnail" class="w-full h-full object-cover group-hover:scale-103 transition-transform duration-700" referrerpolicy="no-referrer" />
+            <span class="absolute top-3 left-3 bg-[#EC4899] text-white text-[8px] font-black uppercase px-2 py-0.5 rounded shadow-sm">
+              {{ news.category }}
+            </span>
+          </div>
+
+          <div class="px-5 space-y-2">
+            <span class="font-mono text-[9px] font-bold text-[#A1A1AA] block">{{ news.date }}</span>
+            <h3 class="font-bold text-white group-hover:text-[#EC4899] transition-colors text-sm leading-snug line-clamp-2">{{ news.title }}</h3>
+            <p class="text-xs text-[#A1A1AA] leading-relaxed line-clamp-3 font-semibold">{{ news.summary }}</p>
+          </div>
+        </div>
+
+        <div class="p-5 pt-0 w-full flex justify-between items-center border-t border-[#1A1F2E] mt-4 text-[9px] text-[#A1A1AA] font-bold">
+          <div class="flex items-center gap-3">
+            <span class="flex items-center gap-1"><span class="material-icons text-xs leading-none">visibility</span>{{ news.views }}</span>
+            <span (click)="likeNews(news.id, $event)" role="button" tabindex="0" class="hover:text-red-400 flex items-center gap-0.5">
+              <span class="material-icons text-xs leading-none text-[#EC4899]">favorite</span>{{ news.likes }}
+            </span>
+          </div>
+          <span class="text-[#EC4899] group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5 uppercase tracking-widest text-[8px]">Boletim completo →</span>
+        </div>
+      </button>
+      }
+    </div>
+  </section>
+
+  <!-- News Detail modal -->
+  @if (selectedNews()) {
+  <div class="fixed inset-0 z-50 bg-[#0B0F1A]/80 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-[#111827] border border-[#1A1F2E] rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative border-glow-magenta text-left">
+      <button (click)="selectedNews.set(null)" class="absolute top-4 right-4 bg-[#0B0F1A] hover:bg-[#1A1F2E] text-slate-300 p-2 rounded-full focus:outline-none z-10">
+        <span class="material-icons text-sm">close</span>
+      </button>
+
+      <div class="relative h-64 w-full bg-[#0B0F1A] overflow-hidden">
+        <img [src]="selectedNews()?.image" [alt]="selectedNews()?.title" class="w-full h-full object-cover" referrerpolicy="no-referrer" />
+        <div class="absolute inset-0 bg-gradient-to-t from-[#111827] to-transparent"></div>
+        <div class="absolute bottom-5 left-6 space-y-1 text-white">
+          <span class="bg-[#EC4899] text-white text-[8px] font-black uppercase px-2 py-0.5 rounded shadow-sm">
+            {{ selectedNews()?.category }}
+          </span>
+          <p class="text-[9px] opacity-80 font-mono font-bold">{{ selectedNews()?.date }}</p>
+        </div>
+      </div>
+
+      <div class="p-6 sm:p-8 space-y-5">
+        <h3 class="text-lg sm:text-xl font-bold text-white tracking-tight leading-snug">{{ selectedNews()?.title }}</h3>
+        <p class="text-[#A1A1AA] font-bold text-xs italic pl-3 border-l-2 border-[#7C3AED] leading-relaxed">
+          {{ selectedNews()?.summary }}
+        </p>
+        <div class="text-xs text-slate-200 leading-relaxed space-y-3 font-semibold pb-4 border-b border-[#1A1F2E]">
+          <p class="whitespace-pre-line">{{ selectedNews()?.content }}</p>
+        </div>
+        <div class="flex justify-between items-center pt-2">
+          <div class="flex items-center gap-4 text-[10px] text-[#A1A1AA] font-bold">
+            <span class="flex items-center gap-1"><span class="material-icons text-sm leading-none">visibility</span> {{ selectedNews()?.views }} views</span>
+            <button (click)="likeNewsDirect(selectedNews()!.id)" class="hover:text-[#EC4899] flex items-center gap-1 cursor-pointer">
+              <span class="material-icons text-sm text-[#EC4899] leading-none">favorite</span> {{ selectedNews()?.likes }} curtir
+            </button>
+          </div>
+          <button (click)="selectedNews.set(null)" class="bg-[#0B0F1A] hover:bg-[#1A1F2E] text-white px-5 py-2.5 rounded-xl text-xs font-bold transition-all border border-[#1A1F2E]">
+            Fechar Notícia
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- AGENDA COBERTURAS & FLASHES -->
+  <section id="eventos" class="max-w-7xl mx-auto py-20 px-4">
+    <div class="text-center space-y-2 mb-12">
+      <span class="text-[10px] text-[#00E5AB] font-black uppercase tracking-widest pl-0.5">FLASHES E COBERTURAS EXTERNAS</span>
+      <h2 class="text-3xl font-black text-white tracking-tight">Flashes ao vivo & Eventos Municipais</h2>
+      <p class="text-[#A1A1AA] text-xs max-w-sm mx-auto leading-relaxed">Acompanhe as pautas, feiras produtivas e eventos acompanhados em tempo real pela nossa equipe externa:</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      @for (evt of events(); track evt.id) {
+      <div class="bg-[#111827] border border-[#1A1F2E] hover:border-[#7C3AED]/30 rounded-2xl overflow-hidden transition-all flex flex-col justify-between text-left group">
+        <div class="bg-[#0B0F1A] p-5 border-b border-[#1A1F2E] flex justify-between items-start">
+          <div class="space-y-0.5">
+            <span class="text-[8px] font-black tracking-widest text-[#7C3AED] uppercase">Flash Cobertura</span>
+            <span class="block font-mono text-[10px] text-[#A1A1AA] font-bold">{{ evt.date }}</span>
+          </div>
+          <span class="bg-[#2A134D]/50 border border-[#7C3AED]/30 text-[#00E5AB] text-[8px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+            Breve
+          </span>
+        </div>
+
+        <div class="p-6 space-y-4">
+          <h3 class="text-sm font-bold text-white leading-snug group-hover:text-[#EC4899] transition-colors">{{ evt.title }}</h3>
+          <p class="text-xs text-[#A1A1AA] leading-relaxed font-semibold">{{ evt.description }}</p>
+
+          <div class="pt-3 border-t border-[#1A1F2E]/80 text-[10px] space-y-1.5 text-slate-300 font-bold">
+            <p class="flex items-center gap-1.5"><span class="material-icons text-[#00E5AB] text-xs leading-none">place</span> Ponto: <strong class="text-white font-bold">{{ evt.location }}</strong></p>
+            <p class="flex items-center gap-1.5"><span class="material-icons text-[#00E5AB] text-xs leading-none">schedule</span> horário: <strong class="text-white font-bold">{{ evt.time }} Horas</strong></p>
+          </div>
+        </div>
+
+        <div class="p-6 pt-0">
+          <button (click)="openEventDetails(evt)" class="w-full bg-[#0B0F1A] hover:bg-[#1A1F2E] border border-[#1A1F2E] text-[#A1A1AA] hover:text-white font-bold py-2.5 rounded-xl text-xs transition-colors flex items-center justify-center gap-1.5 focus:outline-none cursor-pointer">
+            <span class="material-icons text-sm">info</span> Ativar Lembrete / Saber Mais
+          </button>
+        </div>
+      </div>
+      }
+    </div>
+  </section>
+
+  <!-- Event modal overlay -->
+  @if (activeEvent()) {
+  <div class="fixed inset-0 z-50 bg-[#0B0F1A]/80 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-[#111827] border border-[#1A1F2E] rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-5 shadow-2xl relative text-left">
+      <button (click)="closeEventModal()" class="absolute top-4 right-4 text-[#A1A1AA] hover:text-white focus:outline-none">
+        <span class="material-icons">close</span>
+      </button>
+
+      <span class="text-[9px] text-[#EC4899] font-black uppercase tracking-widest pl-0.5">Detalhes da Transmissão Especial</span>
+      <h3 class="text-base sm:text-lg font-bold text-white tracking-tight leading-tight mb-2">{{ activeEvent()?.title }}</h3>
+      <p class="text-slate-300 text-xs leading-relaxed font-semibold">{{ activeEvent()?.description }}</p>
+      
+      <div class="bg-[#0B0F1A] p-4 rounded-xl border border-[#1A1F2E] space-y-2 text-xs text-slate-300">
+        <p class="flex items-center gap-2"><span class="material-icons text-sm text-[#00E5AB]">today</span> Data do Evento: <strong class="text-white">{{ activeEvent()?.date }}</strong></p>
+        <p class="flex items-center gap-2"><span class="material-icons text-sm text-[#00E5AB]">place</span> Local Cobertura: <strong class="text-white">{{ activeEvent()?.location }}</strong></p>
+        <p class="flex items-center gap-2"><span class="material-icons text-sm text-[#00E5AB]">schedule</span> Horário: <strong class="text-white">{{ activeEvent()?.time }} Horas (Brasília)</strong></p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-2 pt-2">
+        <button (click)="showToast('Lembrete de transmissão ativado!'); closeEventModal()" class="flex-1 bg-gradient-to-r from-[#7C3AED] to-[#EC4899] text-white font-black py-3 px-4 rounded-xl text-xs transition-transform transform active:scale-95 shadow-md flex items-center justify-center gap-1.5 focus:outline-none border-none cursor-pointer">
+          <span class="material-icons text-sm">notifications_active</span> Receber Lembrete Digital
+        </button>
+        <button (click)="closeEventModal()" class="bg-[#0B0F1A] hover:bg-[#1A1F2E] text-slate-400 hover:text-white font-bold py-3 px-6 rounded-xl text-xs transition-colors border border-[#1A1F2E] focus:outline-none">
+          Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- SPONSORS BRAND SLATS -->
+  <section id="patrocinadores" class="py-16 bg-[#111827] border-t border-[#1A1F2E]/60">
+    <div class="max-w-7xl mx-auto px-4 text-center space-y-10">
+      <div class="space-y-1.5">
+        <h2 class="text-[9px] uppercase font-black text-[#A1A1AA] tracking-widest">NOSSOS APOIADORES E PARCEIROS</h2>
+        <p class="text-xs text-[#A1A1AA] font-bold">Dedicamos carinho especial às marcas que patrocinam nossa transmissão:</p>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4" id="sponsors-grid-wrapper">
+        @for (sp of sponsors(); track sp.id) {
+        <a [href]="sp.url" class="relative group p-5 bg-[#0B0F1A] border border-[#1A1F2E] rounded-2xl hover:border-[#7C3AED]/30 transition-all text-center flex flex-col justify-between shadow-sm h-36">
+          <div class="space-y-3 flex flex-col justify-between h-full">
+            <div class="h-9 w-9 mx-auto rounded-lg flex items-center justify-center text-[10px] font-black" [ngClass]="sp.colorClass.includes('from-blue') ? 'bg-[#4F46E5]/10 text-[#4F46E5]' : (sp.colorClass.includes('from-amber') ? 'bg-yellow-500/10 text-yellow-500' : (sp.colorClass.includes('from-rose') ? 'bg-[#EC4899]/10 text-[#EC4899]' : 'bg-[#7C3AED]/10 text-[#7C3AED]'))">
+              {{ sp.name.substring(0, 2).toUpperCase() }}
+            </div>
+            <div class="min-w-0">
+              <h4 class="text-[11px] font-bold text-white group-hover:text-[#EC4899] transition-colors truncate">{{ sp.name }}</h4>
+              <p class="text-[8px] text-[#A1A1AA] font-bold uppercase tracking-wider truncate mt-0.5">{{ sp.category }}</p>
+            </div>
+          </div>
+        </a>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- PERSISTENT FLOATING AUDIO BAR DECK -->
+  <div class="fixed bottom-0 left-0 right-0 z-40 bg-[#111827]/95 backdrop-blur-md border-t border-[#1A1F2E] shadow-clean py-3 px-4 transition-all">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+      
+      <!-- Current show display -->
+      <div class="flex items-center gap-3 text-left">
+        <div class="relative flex-shrink-0">
+          <div class="absolute -inset-1 bg-gradient-to-r from-[#7C3AED] to-[#EC4899] rounded-2xl blur-xs animate-pulse opacity-20"></div>
+          <div class="relative h-11 w-11 rounded-xl bg-[#0B0F1A] border border-[#1A1F2E] overflow-hidden flex items-center justify-center">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=100&auto=format&fit=crop" alt="Capa" class="h-full w-full object-cover rounded-xl" referrerpolicy="no-referrer" />
+          </div>
+        </div>
+        <div class="min-w-0">
+          <span class="text-[8px] font-black text-[#A1A1AA] uppercase tracking-widest flex items-center gap-1 shrink-0">
+            <span class="inline-block h-1.5 w-1.5 rounded-full bg-red-500 animate-ping"></span> 
+            SINTONIA LIVE ATIVA
+          </span>
+          <h4 class="text-xs font-black text-white truncate leading-tight mt-0.5">{{ currentlyOnAir().title }}</h4>
+          <p class="text-[10px] text-[#A1A1AA] truncate font-medium">com {{ currentlyOnAir().host }}</p>
+        </div>
+      </div>
+
+      <!-- Playback control decks -->
+      <div class="flex items-center gap-3.5 flex-shrink-0">
+        <button (click)="selectTrack((currentTrackIndex() - 1 + tracks().length) % tracks().length)" class="text-[#A1A1AA] hover:text-white p-1 rounded-full transition-colors focus:outline-none" title="Anterior">
+          <span class="material-icons text-lg leading-none">skip_previous</span>
+        </button>
+
+        <button (click)="togglePlay()" class="h-11 w-11 bg-gradient-to-r from-[#7C3AED] to-[#EC4899] text-white rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-105 active:scale-95 focus:outline-none relative border-glow-purple cursor-pointer shadow-lg border-none">
+          @if (isConnecting()) {
+          <span class="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+          } @else {
+          <span class="material-icons text-xl leading-none">{{ isPlaying() ? 'pause' : 'play_arrow' }}</span>
+          }
+        </button>
+
+        <button (click)="selectTrack((currentTrackIndex() + 1) % tracks().length)" class="text-[#A1A1AA] hover:text-white p-1 rounded-full transition-colors focus:outline-none" title="Próximo">
+          <span class="material-icons text-lg leading-none">skip_next</span>
+        </button>
+
+        <div class="hidden md:flex items-center gap-2 bg-[#0B0F1A] px-3 py-1.5 rounded-full border border-[#1A1F2E] shrink-0 ml-2">
+          <button (click)="toggleMute()" class="text-[#A1A1AA] hover:text-white focus:outline-none">
+            <span class="material-icons text-sm leading-none">
+              {{ isMuted() || currentVolume() === 0 ? 'volume_off' : (currentVolume() < 0.4 ? 'volume_down' : 'volume_up') }}
+            </span>
+          </button>
+          <input type="range" min="0" max="1" step="0.05" [value]="isMuted() ? 0 : currentVolume()" (input)="setVolume($event)" class="w-16 h-1 bg-[#111827] rounded-full cursor-pointer" title="Volume" />
+        </div>
+      </div>
+
+      <!-- Participe link -->
+      <div class="flex items-center gap-2">
+        <a href="#recados" class="bg-transparent hover:bg-[#7C3AED]/15 border border-[#7C3AED]/60 text-white font-extrabold text-[9px] uppercase tracking-widest px-4.5 py-2.5 rounded-xl transition-all hidden sm:flex items-center gap-1.5 focus:outline-none select-none">
+          <span class="material-icons text-xs leading-none">forum</span> PARTICIPE
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- PWA INSTALL SECTION -->
+  @if (canInstall()) {
+  <section id="instalar" class="py-20 px-4 bg-gradient-to-br from-[#0D0B2A] via-[#0B0F1A] to-[#080A15] relative overflow-hidden border-t border-[#1A1F2E]/60">
+    <div class="absolute top-0 left-1/4 h-[350px] w-[350px] bg-[#7C3AED]/10 rounded-full blur-3xl pointer-events-none animate-pulse-slow"></div>
+    <div class="absolute bottom-0 right-1/4 h-[350px] w-[350px] bg-[#EC4899]/8 rounded-full blur-3xl pointer-events-none animate-pulse-slow"></div>
+
+    <div class="max-w-4xl mx-auto relative z-10 text-center space-y-10">
+
+      <!-- Título e subtítulo -->
+      <div class="space-y-4">
+        <div class="inline-flex items-center gap-2 bg-[#2A134D] border border-[#7C3AED]/30 py-1.5 px-4 rounded-full text-[10px] text-white font-black uppercase tracking-widest">
+          <span class="material-icons text-xs leading-none text-[#00E5AB]">smartphone</span>
+          APLICATIVO DISPONÍVEL
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight leading-tight">
+          Leve a Rádio Local<br/>
+          <span class="bg-gradient-to-r from-[#7C3AED] via-[#EC4899] to-[#00E5AB] bg-clip-text text-transparent">no seu bolso, de graça</span>
+        </h2>
+        <p class="text-[#A1A1AA] text-xs sm:text-sm leading-relaxed max-w-md mx-auto font-semibold">
+          Instale o app e ouça onde estiver. Acesso direto na tela inicial, carregamento instantâneo e sem abrir o navegador.
+        </p>
+      </div>
+
+      <!-- Botão CTA principal -->
+      <div class="flex flex-col items-center gap-6">
+        <div class="relative group">
+          <div class="absolute -inset-1.5 bg-gradient-to-r from-[#7C3AED] to-[#EC4899] rounded-2xl blur-lg opacity-40 group-hover:opacity-70 transition-opacity animate-pulse-slow"></div>
+          <button (click)="installPwa()" class="relative bg-gradient-to-r from-[#7C3AED] to-[#EC4899] hover:opacity-95 active:scale-95 text-white font-black px-12 py-5 rounded-2xl shadow-2xl transition-all flex items-center gap-3 text-base uppercase tracking-widest border-none cursor-pointer">
+            <span class="material-icons text-3xl leading-none">install_mobile</span>
+            <span class="flex flex-col items-start leading-none gap-1">
+              <span class="text-[9px] text-white/70 font-bold tracking-widest uppercase">toque para instalar</span>
+              <span class="text-base font-black">Instalar Aplicativo Grátis</span>
+            </span>
+          </button>
+        </div>
+        <div class="flex items-center gap-5 text-[11px] text-[#A1A1AA] font-semibold">
+          <span class="flex items-center gap-1.5"><span class="material-icons text-sm text-[#00E5AB]">check_circle</span> Gratuito</span>
+          <span class="h-3 w-px bg-[#1A1F2E]"></span>
+          <span class="flex items-center gap-1.5"><span class="material-icons text-sm text-[#00E5AB]">check_circle</span> Sem anúncios</span>
+          <span class="h-3 w-px bg-[#1A1F2E]"></span>
+          <span class="flex items-center gap-1.5"><span class="material-icons text-sm text-[#00E5AB]">check_circle</span> Leve e rápido</span>
+        </div>
+      </div>
+
+      <!-- Instrução iOS -->
+      <p class="text-[10px] text-[#A1A1AA] font-semibold flex items-center justify-center gap-1.5 flex-wrap">
+        <span class="material-icons text-xs text-[#7C3AED]">info_outline</span>
+        iPhone / Safari: toque em
+        <span class="inline-flex items-center gap-0.5 bg-[#1A1F2E] border border-[#7C3AED]/20 text-white px-2 py-1 rounded-lg text-[9px] font-black">
+          <span class="material-icons text-[11px] leading-none">ios_share</span> Compartilhar
+        </span>
+        e depois em "Adicionar à Tela de Início"
+      </p>
+
+    </div>
+  </section>
+  }
+
+  <!-- PRIMARY FOOTER -->
+  <footer class="bg-[#0B0F1A] border-t border-[#1A1F2E] text-[#A1A1AA] py-14 px-4 pb-28 text-left" id="app-footer">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div class="space-y-4 md:col-span-2">
+        <div class="flex items-center gap-2">
+          <div class="flex items-center gap-[3px] h-6 flex-shrink-0">
+            <span class="w-[2px] h-2 bg-[#7C3AED] rounded-full"></span>
+            <span class="w-[2px] h-4 bg-[#EC4899] rounded-full"></span>
+            <span class="w-[2px] h-5 bg-[#00E5AB] rounded-full"></span>
+            <span class="w-[2px] h-3 bg-[#4F46E5] rounded-full"></span>
+          </div>
+          <h3 class="text-xs font-black text-white tracking-widest uppercase">RÁDIO LOCAL 87,9 FM</h3>
+        </div>
+        <p class="text-xs leading-relaxed max-w-sm font-semibold">
+          Conectando as pessoas de Goiás, Tocantins e sintonizados de todo o Brasil com o calor regional da voz e som digital livre de ruídos.
+        </p>
+      </div>
+
+      <div class="space-y-3">
+        <h4 class="text-xs font-black text-white uppercase tracking-widest">Início Rápido</h4>
+        <div class="flex flex-col gap-2 text-xs font-semibold">
+          <a href="#inicio" class="hover:text-white transition-colors">Início</a>
+          <a href="#sobre" class="hover:text-white transition-colors">A Rádio</a>
+          <a href="#player" class="hover:text-white transition-colors">Player Sintonizador</a>
+          <a href="#programacao" class="hover:text-white transition-colors">Grade Semanal</a>
+        </div>
+      </div>
+
+      <div class="space-y-3">
+        <h4 class="text-xs font-black text-white uppercase tracking-widest">Informações</h4>
+        <div class="flex flex-col gap-2 text-xs font-semibold">
+          <p class="flex items-center gap-1.5"><span class="material-icons text-xs text-[#00E5AB]">place</span> Campos Belos - GO</p>
+          <p class="flex items-center gap-1.5"><span class="material-icons text-xs text-[#00E5AB]">email</span> contato&#64;radiolocalcamposbelos.com</p>
+          <p class="text-[10px] text-[#A1A1AA] font-mono mt-2 select-none">© 2026 Rádio Local. Todos os Direitos Reservados.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>

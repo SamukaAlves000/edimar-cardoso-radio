@@ -1,0 +1,17 @@
+{
+  "name": "Rádio Local 87,9 FM",
+  "short_name": "Rádio Local",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B0F1A",
+  "theme_color": "#7C3AED",
+  "description": "Ouça a Rádio Local 87,9 FM ao vivo — música, informação e cultura regional 24h no ar.",
+  "dir": "ltr",
+  "lang": "pt-BR",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "favicon.ico", "sizes": "64x64", "type": "image/x-icon" },
+    { "src": "icone_pwa.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icone_pwa.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
