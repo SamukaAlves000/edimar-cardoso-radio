@@ -12,6 +12,7 @@ import {
   PLATFORM_ID,
   Inject,
   HostListener,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
@@ -454,9 +455,7 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
   // Currently on air computed state
   currentlyOnAir = computed(() => {
     const day = this.selectedScheduleDay();
-    // Use Brazilia local time calculated below
     const date = new Date();
-    // Approximate brazilia hour
     const utcHours = date.getUTCHours();
     const brHour = (utcHours - 3 + 24) % 24;
 
@@ -469,7 +468,6 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
       if (p.startHour <= p.endHour) {
         return brHour >= p.startHour && brHour < p.endHour;
       } else {
-        // Over midnight e.g. 22:00 to 02:00
         return brHour >= p.startHour || brHour < p.endHour;
       }
     });
@@ -477,8 +475,55 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
     return active || targetSchedule[0];
   });
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-    // Synchronize play state/volume properties if needed using effects
+  // Bind dos métodos para manter o contexto
+  private onPlay = () => {
+    this.isPlaying.set(true);
+    this.isConnecting.set(false);
+    this.playError.set(null);
+    this.cdr.detectChanges();
+  }
+
+  private onPlaying = () => {
+    console.log('Audio is playing');
+    this.isPlaying.set(true);
+    this.isConnecting.set(false);
+    this.playError.set(null);
+    this.cdr.detectChanges();
+  }
+
+  private onPause = () => {
+    console.log('Audio paused');
+    this.isPlaying.set(false);
+    this.isConnecting.set(false);
+    this.cdr.detectChanges();
+  }
+
+  private onWaiting = () => {
+    console.log('Audio waiting (buffering)');
+    if (!this.isPlaying()) {
+      this.isConnecting.set(true);
+    }
+    this.cdr.detectChanges();
+  }
+
+  private onCanPlay = () => {
+    console.log('Audio can play');
+    this.isConnecting.set(false);
+    this.cdr.detectChanges();
+  }
+
+  private onError = (e: Event) => {
+    console.error('Audio error:', e);
+    this.isConnecting.set(false);
+    this.isPlaying.set(false);
+    this.playError.set('Erro na transmissão. Verifique sua conexão.');
+    this.cdr.detectChanges();
+  }
+
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private cdr: ChangeDetectorRef
+  ) {
     effect(() => {
       const vol = this.currentVolume();
       const mute = this.isMuted();
@@ -488,24 +533,19 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    // Generate Brazil Clock
     this.updateClock();
     setInterval(() => {
       this.updateClock();
-      // Fluid listener flux (varies 440-490)
       const diff = Math.floor(Math.random() * 5) - 2;
       this.listenerCount.update((c: number) => Math.max(380, Math.min(550, c + diff)));
     }, 1000);
 
-    // Periodically simulate listener messages (every 50 seconds to make it look alive!)
     setInterval(() => {
       this.simulateListenerInteraction();
     }, 50000);
 
-    // Load from local storage
     this.loadPersistedData();
 
-    // PWA install detection
     if (isPlatformBrowser(this.platformId)) {
       const isStandalone =
         window.matchMedia('(display-mode: standalone)').matches ||
@@ -551,29 +591,61 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     if (!isPlatformBrowser(this.platformId)) return;
 
-    // Initialize procedural visualizer canvas
-    const canvas = this.visualizerCanvas.nativeElement;
-    this.canvasCtx = canvas.getContext('2d');
-    this.resizeCanvas();
-    window.addEventListener('resize', () => this.resizeCanvas());
-    this.startVisualizationLoop();
+    const canvas = this.visualizerCanvas?.nativeElement;
+    if (canvas) {
+      this.canvasCtx = canvas.getContext('2d');
+      this.resizeCanvas();
+      window.addEventListener('resize', () => this.resizeCanvas());
+      this.startVisualizationLoop();
+    }
 
     const radio = this.radioPlayer?.nativeElement;
     if (!radio) return;
 
-    // Sync state — "waiting" is normal live-stream buffering, never set connecting after first play
-    radio.addEventListener('playing', () => { this.isConnecting.set(false); this.isPlaying.set(true); });
-    radio.addEventListener('canplay', () => { this.isConnecting.set(false); });
-    radio.addEventListener('pause',   () => { this.isPlaying.set(false); this.isConnecting.set(false); });
-    radio.addEventListener('error',   () => { this.isConnecting.set(false); this.isPlaying.set(false); });
-
-    // Autoplay attempt — browser may block; if so, silently clear spinner
+    this.setupAudioEventListeners(radio);
+    
+    radio.preload = 'auto';
     radio.volume = this.isMuted() ? 0 : this.currentVolume();
-    this.isConnecting.set(true);
-    radio.play().catch(() => this.isConnecting.set(false));
+    radio.load();
+    
+    this.attemptAutoplay(radio);
+  }
 
-    // Media Session API — artwork + controls on lock screen / notification
-    this.setupMediaSession();
+  private setupAudioEventListeners(radio: HTMLAudioElement) {
+    radio.removeEventListener('play', this.onPlay);
+    radio.removeEventListener('playing', this.onPlaying);
+    radio.removeEventListener('pause', this.onPause);
+    radio.removeEventListener('waiting', this.onWaiting);
+    radio.removeEventListener('canplay', this.onCanPlay);
+    radio.removeEventListener('error', this.onError);
+    
+    radio.addEventListener('play', this.onPlay);
+    radio.addEventListener('playing', this.onPlaying);
+    radio.addEventListener('pause', this.onPause);
+    radio.addEventListener('waiting', this.onWaiting);
+    radio.addEventListener('canplay', this.onCanPlay);
+    radio.addEventListener('error', this.onError);
+  }
+
+  private attemptAutoplay(radio: HTMLAudioElement) {
+    const playPromise = radio.play();
+    
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          console.log('Autoplay successful');
+          this.isPlaying.set(true);
+          this.isConnecting.set(false);
+          this.cdr.detectChanges();
+        })
+        .catch((error) => {
+          console.log('Autoplay prevented by browser:', error);
+          this.isPlaying.set(false);
+          this.isConnecting.set(false);
+          this.playError.set(null);
+          this.cdr.detectChanges();
+        });
+    }
   }
 
   private setupMediaSession() {
@@ -587,22 +659,32 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
         { src: '/edimar.png', sizes: '512x512', type: 'image/png' },
       ],
     });
-    navigator.mediaSession.setActionHandler('play',  () => { this.radioPlayer?.nativeElement.play(); });
-    navigator.mediaSession.setActionHandler('pause', () => { this.radioPlayer?.nativeElement.pause(); });
-    navigator.mediaSession.setActionHandler('stop',  () => { this.radioPlayer?.nativeElement.pause(); });
+    navigator.mediaSession.setActionHandler('play', () => { this.radioPlayer?.nativeElement?.play(); });
+    navigator.mediaSession.setActionHandler('pause', () => { this.radioPlayer?.nativeElement?.pause(); });
+    navigator.mediaSession.setActionHandler('stop', () => { this.radioPlayer?.nativeElement?.pause(); });
   }
 
   ngOnDestroy() {
     if (this.animationId) {
       cancelAnimationFrame(this.animationId);
     }
+    
+    const radio = this.radioPlayer?.nativeElement;
+    if (radio) {
+      radio.removeEventListener('play', this.onPlay);
+      radio.removeEventListener('playing', this.onPlaying);
+      radio.removeEventListener('pause', this.onPause);
+      radio.removeEventListener('waiting', this.onWaiting);
+      radio.removeEventListener('canplay', this.onCanPlay);
+      radio.removeEventListener('error', this.onError);
+    }
   }
 
-  // Audio actions
   togglePlay() {
     if (!isPlatformBrowser(this.platformId)) return;
     const radio = this.radioPlayer?.nativeElement;
     if (!radio) return;
+    
     this.playError.set(null);
 
     if (this.isPlaying()) {
@@ -610,14 +692,23 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.isConnecting.set(true);
       radio.volume = this.isMuted() ? 0 : this.currentVolume();
-      // Reload stream on manual reconnect to flush stale buffer
-      radio.load();
-      radio.play().catch((err) => {
-        console.error('Play error:', err);
-        this.isConnecting.set(false);
-        this.isPlaying.set(false);
-        this.playError.set('Não foi possível iniciar. Verifique sua conexão e tente novamente.');
-      });
+      this.cdr.detectChanges();
+      
+      const playPromise = radio.play();
+      
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            console.log('Play succeeded');
+          })
+          .catch((err) => {
+            console.error('Play error:', err);
+            this.isConnecting.set(false);
+            this.isPlaying.set(false);
+            this.playError.set('Não foi possível iniciar. Clique novamente para tentar.');
+            this.cdr.detectChanges();
+          });
+      }
     }
   }
 
@@ -631,7 +722,6 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
       this.audio.src = this.tracks()[index].url;
       this.audio.load();
     } else {
-      // Lazy construct on play
       return;
     }
 
@@ -661,10 +751,8 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
     this.isMuted.update((m) => !m);
   }
 
-  // Clock formatter helper
   private updateClock() {
     const d = new Date();
-    // Brazil standard is UTC-3
     const utcHours = d.getUTCHours();
     const utcMinutes = d.getUTCMinutes();
     const utcSeconds = d.getUTCSeconds();
@@ -676,8 +764,6 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
 
     this.braziliaTime.set(`${h}:${m}:${s}`);
 
-    // Update Schedule Day tab programmatically depending on day of the week
-    // 0 = Sunday, 1 = Monday ... 6 = Saturday
     const dayOfWeek = d.getDay();
     if (this.selectedScheduleDay() === 'seg-sex' && (dayOfWeek === 0 || dayOfWeek === 6)) {
       if (dayOfWeek === 0) this.selectedScheduleDay.set('dom');
@@ -685,7 +771,6 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  // Format track durations
   private formatTime(secs: number): string {
     if (isNaN(secs) || !isFinite(secs)) return '00:00';
     const m = Math.floor(secs / 60);
@@ -693,7 +778,6 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   }
 
-  // Draw procedural fluid waves representing equalizer
   private resizeCanvas() {
     if (this.visualizerCanvas && this.visualizerCanvas.nativeElement) {
       const c = this.visualizerCanvas.nativeElement;
@@ -717,14 +801,13 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
         const playing = this.isPlaying();
         const connecting = this.isConnecting();
 
-        // Draw multiple overlapping glowing neon digital waves
         const waveCount = 5;
         const colors = [
-          'rgba(79, 70, 229, 0.12)',   // Electric Blue (#4F46E5) translucent
-          'rgba(124, 58, 237, 0.22)',  // Purple Neon (#7C3AED) translucent
-          'rgba(236, 72, 153, 0.32)',  // Magenta Vibrante (#EC4899) translucent
-          'rgba(0, 229, 171, 0.52)',   // Turquoise Neon (#00E5AB) high contrast
-          'rgba(124, 58, 237, 0.82)',  // Main purple wave
+          'rgba(79, 70, 229, 0.12)',
+          'rgba(124, 58, 237, 0.22)',
+          'rgba(236, 72, 153, 0.32)',
+          'rgba(0, 229, 171, 0.52)',
+          'rgba(124, 58, 237, 0.82)',
         ];
 
         for (let i = 0; i < waveCount; i++) {
@@ -733,7 +816,6 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
           ctx.strokeStyle = colors[i];
 
           const frequency = 0.006 + (i * 0.002);
-          // High amplitude if playing, flat if static, pulsating if connecting
           let baseAmplitude = playing ? 16 - i * 2 : 2.5;
           if (connecting) {
             baseAmplitude = 6 + Math.sin(this.simulationTime * 0.15) * 4;
@@ -742,9 +824,8 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
           ctx.moveTo(0, h / 2);
 
           for (let x = 0; x <= w; x += 3) {
-            // Apply sine modulation with relative speeds
             const speedMod = this.simulationTime * (0.015 + i * 0.005);
-            const edgeTaper = Math.sin((x / w) * Math.PI); // Smooth out boundaries
+            const edgeTaper = Math.sin((x / w) * Math.PI);
             const formula = Math.sin(x * frequency + speedMod) * Math.cos(x * 0.002 - speedMod * 0.5);
             const y = h / 2 + formula * baseAmplitude * edgeTaper;
             ctx.lineTo(x, y);
@@ -760,7 +841,6 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
     paint();
   }
 
-  // Interactive Form submits
   sendRecado() {
     if (this.recadoForm.invalid) {
       this.recadoForm.markAllAsTouched();
@@ -832,7 +912,6 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
     this.persistNews();
   }
 
-  // Trigger simulated interactions to make things feel alive
   private simulateListenerInteraction() {
     const dummyNames = [
       'Geraldo Rosa',
@@ -879,23 +958,19 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
       likes: Math.floor(Math.random() * 3),
     };
 
-    // Update signal list
     this.messages.update((m) => [generatedMsg, ...m.slice(0, 15)]);
     this.showToast(`Novo recado adicionado ao vivo de ${generatedMsg.name} (${generatedMsg.city})!`);
   }
 
-  // Toast message controller
   showToast(text: string) {
     this.toastMessage.set(text);
     setTimeout(() => {
-      // Clear after 4 seconds
       if (this.toastMessage() === text) {
         this.toastMessage.set(null);
       }
     }, 4000);
   }
 
-  // Event overlay detail triggers
   openEventDetails(evt: EventItem) {
     this.activeEvent.set(evt);
   }
@@ -904,7 +979,6 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
     this.activeEvent.set(null);
   }
 
-  // Admin access
   authenticateAdmin() {
     const val = this.adminPassphrase.value;
     if (val === 'edmar10' || val === 'admin') {
@@ -957,7 +1031,6 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
     this.showToast('Grandiosa notícia publicada com sucesso e já está disponível no feed principal!');
   }
 
-  // Persist / Load from Local Storage
   private persistMessages() {
     if (typeof window !== 'undefined') {
       try {
