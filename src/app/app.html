@@ -87,9 +87,6 @@
             <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.73-1.451L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.851-4.106 9.855-9.15.002-2.443-.949-4.739-2.677-6.471C16.924 3.25 14.636 2.3 12.2 2.3c-5.444 0-9.866 4.41-9.87 9.456-.002 2.085.547 4.122 1.59 5.895L2.854 21.2l3.793-.946z" /></svg>
           </a>
         </div>
-        <a href="#player" class="bg-gradient-to-r from-[#7C3AED] to-[#EC4899] hover:opacity-90 text-white font-extrabold text-[10px] uppercase tracking-widest px-4.5 py-2 rounded-full flex items-center gap-1.5 shadow-md active:scale-95 transition-all">
-          <span class="material-icons text-sm leading-none">play_arrow</span> AO VIVO
-        </a>
         <button (click)="showAdminPanel.set(!showAdminPanel())" class="bg-[#111827] hover:bg-[#1A1F2E] text-slate-300 p-2.5 rounded-full transition-colors flex items-center justify-center border border-[#1A1F2E]" title="Painel Radialista">
           <span class="material-icons text-sm leading-none">settings</span>
         </button>
@@ -210,25 +207,38 @@
             </p>
           </div>
 
-          <!-- CTAs Controls linked to audio backend and forms -->
-          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-            <button (click)="togglePlay()" class="flex-1 sm:flex-initial bg-gradient-to-r from-[#7C3AED] to-[#EC4899] hover:opacity-90 active:scale-98 text-white font-black px-8 py-3.5 rounded-full shadow-lg transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-widest border-glow-magenta border-none cursor-pointer">
-              <!-- Play state logic display -->
-              @if (isConnecting()) {
-                <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                <span>CONECTANDO...</span>
-              } @else {
-                <span class="material-icons text-sm">{{ isPlaying() ? 'pause' : 'play_arrow' }}</span>
-                <span>{{ isPlaying() ? 'PAUSAR TRANSMISSÃO' : 'OUVIR AO VIVO' }}</span>
-              }
-            </button>
-            <a href="#recados" class="flex-1 sm:flex-initial bg-[#1F2943]/60 hover:bg-[#7C3AED]/20 border border-[#7C3AED]/35 hover:border-[#7C3AED]/60 text-white font-black px-8 py-3.5 rounded-full transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-widest leading-none">
-              <span class="material-icons text-sm text-[#7C3AED]">music_note</span> PEDIR MÚSICA DE CORAÇÃO
-            </a>
+          <!-- CTAs Controls -->
+          <div class="space-y-3">
+            @if (playError()) {
+            <div class="bg-red-950/40 border border-red-500/30 text-red-200 p-3 rounded-xl text-xs flex gap-2 items-center">
+              <span class="material-icons text-red-400 text-sm leading-none">error_outline</span>
+              <p class="flex-1 font-semibold leading-relaxed">{{ playError() }}</p>
+              <button (click)="playError.set(null)" class="text-slate-400 hover:text-white focus:outline-none"><span class="material-icons text-xs">close</span></button>
+            </div>
+            }
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              <button (click)="togglePlay()" class="flex-1 sm:flex-initial bg-gradient-to-r from-[#7C3AED] to-[#EC4899] hover:opacity-90 active:scale-98 text-white font-black px-8 py-3.5 rounded-full shadow-lg transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-widest border-glow-magenta border-none cursor-pointer">
+                @if (isConnecting()) {
+                  <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  <span>CONECTANDO...</span>
+                } @else {
+                  <span class="material-icons text-sm">{{ isPlaying() ? 'pause' : 'play_arrow' }}</span>
+                  <span>{{ isPlaying() ? 'PAUSAR TRANSMISSÃO' : 'OUVIR AO VIVO' }}</span>
+                }
+              </button>
+              <a href="#recados" class="flex-1 sm:flex-initial bg-[#1F2943]/60 hover:bg-[#7C3AED]/20 border border-[#7C3AED]/35 hover:border-[#7C3AED]/60 text-white font-black px-8 py-3.5 rounded-full transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-widest leading-none">
+                <span class="material-icons text-sm text-[#7C3AED]">music_note</span> PEDIR MÚSICA DE CORAÇÃO
+              </a>
+            </div>
           </div>
+
+          <!-- Player de áudio oculto — source do stream ao vivo -->
+          <audio #radioPlayer autoplay class="hidden">
+            <source src="https://stm11.srvvox.com.br:7080/stream" type="audio/mpeg" />
+          </audio>
 
           <!-- Quick statistics row mirroring the bottom of the second mockup layout -->
           <div class="grid grid-cols-2 md:grid-cols-4 gap-4 border-t border-white/5 pt-5 text-slate-300">
@@ -388,124 +398,6 @@
           </div>
         </button>
         }
-      </div>
-    </div>
-  </section>
-
-  <!-- PERSISTENT BROADCASTING / TRACK CONTROL SYSTEM (Core station audio deck holding srvvox iframe) -->
-  <section id="player" class="py-20 bg-[#1A1F2E] border-t border-b border-[#1A1F2E] text-white overflow-hidden relative">
-    <div class="absolute -top-32 -left-32 h-[350px] w-[350px] bg-[#7C3AED]/5 rounded-full blur-3xl pointer-events-none"></div>
-    
-    <div class="max-w-4xl mx-auto px-4 relative z-10 text-center">
-      <div class="space-y-2 mb-10">
-        <span class="text-[10px] text-[#00E5AB] font-black uppercase tracking-widest text-glow-turquoise">SINTONIA BROADCAST DIGITAL</span>
-        <h2 class="text-3xl font-black text-white tracking-tight">Estação Principal de Alta Fidelidade</h2>
-        <p class="text-xs text-[#A1A1AA] max-w-md mx-auto leading-relaxed">Conecte-se ao sinal digital purificado 24h sem ruídos utilizando o reprodutor estúdio e os acopladores abaixo:</p>
-      </div>
-
-      <div class="bg-[#111827] border border-[#1A1F2E] rounded-3xl p-6 sm:p-8 shadow-clean space-y-6">
-        @if (playError()) {
-        <div class="bg-red-950/40 border border-red-500/30 text-red-200 p-4 rounded-xl text-xs flex gap-2.5 items-center text-left">
-          <span class="material-icons text-red-400 text-sm leading-none">error_outline</span>
-          <p class="flex-1 font-semibold leading-relaxed">{{ playError() }}</p>
-          <button (click)="playError.set(null)" class="text-slate-400 hover:text-white focus:outline-none"><span class="material-icons text-xs leading-none">close</span></button>
-        </div>
-        }
-
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-          
-          <!-- Left Specs & Equalizer visualizer -->
-          <div class="lg:col-span-5 flex flex-col justify-between bg-[#0B0F1A] p-5 rounded-2xl border border-[#1A1F2E] text-left gap-4">
-            <div class="space-y-2">
-              <span class="bg-[#2A134D] text-[#00E5AB] text-[8px] font-black tracking-wider uppercase px-2 py-0.5 rounded inline-block">SINAL PRINCIPAL HD</span>
-              <h3 class="text-xs font-black text-white uppercase tracking-widest">A SINTONIA DO EDMAR CARDOSO</h3>
-              <p class="text-[11px] text-[#A1A1AA] leading-relaxed font-semibold">Uso sofisticado de modulação digital buscando disponibilizar o áudio regional livre de ruídos 24 horas por dia.</p>
-            </div>
-
-            <div class="space-y-1.5">
-              <p class="text-[8px] text-[#A1A1AA] uppercase tracking-widest font-black flex items-center gap-1">
-                <span class="material-icons text-[10px] leading-none text-[#7C3AED]">graphic_eq</span> MONITOR FREGUÊNCIA DO REPRODUTOR
-              </p>
-              <div class="w-full h-11 bg-[#05070D] rounded-xl border border-[#1A1F2E] overflow-hidden shadow-inner">
-                <canvas #visualizerCanvas class="w-full h-full block"></canvas>
-              </div>
-            </div>
-          </div>
-
-          <!-- Right: Secure Web Radio Iframe framework handler (7 Columns) -->
-          <div class="lg:col-span-7 flex flex-col justify-center bg-[#0B0F1A] rounded-2xl p-5 sm:p-6 border border-[#1A1F2E] text-left relative overflow-hidden gap-4">
-            <div class="absolute -top-10 -right-10 h-32 w-32 bg-[#EC4899]/5 rounded-full blur-2xl pointer-events-none"></div>
-
-            <div class="flex justify-between items-center border-b border-[#1A1F2E] pb-2.5">
-              <div class="flex items-center gap-1.5 text-[8px] uppercase tracking-widest font-black text-[#A1A1AA]">
-                <span class="inline-block h-1.5 w-1.5 rounded-full bg-[#00E5AB] animate-pulse"></span>
-                <span>ONLINE AUDIO DECK</span>
-              </div>
-              <span class="text-[8px] font-mono font-bold text-[#A1A1AA] tracking-wider">128 KBPS AAC Stereo</span>
-            </div>
-
-            <p class="text-xs font-bold text-white">Inicie sua sintonia ao vivo utilizando o reprodutor estúdio:</p>
-
-            <div class="bg-[#111827] p-4 rounded-xl border border-[#1A1F2E] shadow-inner space-y-3">
-              <div class="flex justify-between items-center text-[9px] font-mono text-[#A1A1AA] font-black px-0.5">
-                <span class="flex items-center gap-1"><span class="material-icons text-xs text-[#7C3AED]">play_circle_filled</span> REPRODUTOR INTEGRADO</span>
-                <span class="text-[#00E5AB] font-black uppercase">Sinal Ativo</span>
-              </div>
-              
-              <div class="w-full overflow-hidden rounded bg-[#0B0F1A] border border-[#1A1F2E]">
-                <audio controls autoplay class="w-full h-10 [color-scheme:dark]" style="accent-color:#7C3AED;">
-                  <source src="https://stm11.srvvox.com.br:7080/stream" type="audio/mpeg" />
-                  Seu navegador não suporta áudio.
-                </audio>
-              </div>
-            </div>
-
-            <div class="flex items-center gap-2 text-[10px] text-[#A1A1AA] bg-[#111827]/40 p-2.5 rounded-lg border border-[#1A1F2E] font-semibold leading-relaxed">
-              <span class="material-icons text-[#EC4899] text-xs leading-none">info_outline</span>
-               <span>Caso o áudio não inicie automaticamente em seu dispositivo, certifique-se de sintonizar no player acoplado acima.</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Alternate demo tracks toggle section -->
-        <div class="border-t border-[#1A1F2E] pt-5 mt-2 text-left">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
-            <div>
-              <h4 class="text-xs font-black uppercase tracking-widest text-[#A1A1AA] flex items-center gap-1">
-                <span class="material-icons text-sm text-[#7C3AED]">album</span> trilhas alternativas / demonstração local
-              </h4>
-              <p class="text-[10px] text-[#A1A1AA] font-semibold mt-0.5">Clique em uma trilha de alta fidelidade para exercitar e escutar no visualizador local:</p>
-            </div>
-
-            @if (currentTrackIndex() > -1 && isPlaying() && !currentTrack().isLive) {
-            <div class="flex items-center gap-3 bg-[#0B0F1A] px-3.5 py-1.5 rounded-full border border-[#1A1F2E]">
-              <button (click)="toggleMute()" class="text-slate-400 hover:text-[#7C3AED] transition-colors focus:outline-none" [title]="isMuted() ? 'Tirar Mudo' : 'Mutar Volume'">
-                <span class="material-icons text-sm leading-none">
-                  {{ isMuted() || currentVolume() === 0 ? 'volume_off' : (currentVolume() < 0.4 ? 'volume_down' : 'volume_up') }}
-                </span>
-              </button>
-              <input type="range" min="0" max="1" step="0.05" [value]="isMuted() ? 0 : currentVolume()" (input)="setVolume($event)" class="w-16 h-1 bg-[#111827] rounded-full cursor-pointer" title="Slider" />
-            </div>
-            }
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5" id="sintonia-selector">
-            @for (tk of tracks(); track tk.id; let i = $index) {
-            <button (click)="selectTrack(i)" class="p-3 text-left rounded-xl transition-all flex items-center justify-between cursor-pointer focus:outline-none border" [ngClass]="currentTrackIndex() === i && isPlaying() && !currentTrack().isLive ? 'bg-gradient-to-r from-[#7C3AED] to-[#EC4899] text-white font-extrabold border-transparent shadow-lg' : 'bg-[#111827] hover:bg-[#1A1F2E] text-slate-300 border-[#1A1F2E]'">
-              <div class="flex items-center gap-2.5 min-w-0">
-                <div class="h-7 w-7 rounded bg-[#0B0F1A] flex items-center justify-center flex-shrink-0" [ngClass]="currentTrackIndex() === i && isPlaying() && !currentTrack().isLive ? 'bg-white/20 text-white' : 'text-[#7C3AED]'">
-                  <span class="material-icons text-xs leading-none">play_arrow</span>
-                </div>
-                <div class="min-w-0 pr-1">
-                  <p class="text-xs truncate font-bold leading-tight">{{ tk.title }}</p>
-                  <p class="text-[9px] font-bold opacity-80 mt-0.5 truncate">{{ tk.artist }}</p>
-                </div>
-              </div>
-              <span class="material-icons text-xs opacity-60 leading-none">audiotrack</span>
-            </button>
-            }
-          </div>
-        </div>
       </div>
     </div>
   </section>
@@ -930,25 +822,24 @@
         <div class="relative flex-shrink-0">
           <div class="absolute -inset-1 bg-gradient-to-r from-[#7C3AED] to-[#EC4899] rounded-2xl blur-xs animate-pulse opacity-20"></div>
           <div class="relative h-11 w-11 rounded-xl bg-[#0B0F1A] border border-[#1A1F2E] overflow-hidden flex items-center justify-center">
-            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=100&auto=format&fit=crop" alt="Capa" class="h-full w-full object-cover rounded-xl" referrerpolicy="no-referrer" />
+            <img src="/edimar.png" alt="Edmar Cardoso" class="h-full w-full object-cover rounded-xl" />
           </div>
         </div>
         <div class="min-w-0">
-          <span class="text-[8px] font-black text-[#A1A1AA] uppercase tracking-widest flex items-center gap-1 shrink-0">
-            <span class="inline-block h-1.5 w-1.5 rounded-full bg-red-500 animate-ping"></span> 
-            SINTONIA LIVE ATIVA
+          <span class="text-[8px] font-black text-[#EC4899] uppercase tracking-widest flex items-center gap-1.5 shrink-0">
+            <span class="inline-block h-1.5 w-1.5 rounded-full bg-red-500 animate-ping"></span>
+            PROGRAMAÇÃO AO VIVO
           </span>
           <h4 class="text-xs font-black text-white truncate leading-tight mt-0.5">{{ currentlyOnAir().title }}</h4>
-          <p class="text-[10px] text-[#A1A1AA] truncate font-medium">com {{ currentlyOnAir().host }}</p>
+          <p class="text-[10px] text-[#A1A1AA] truncate font-medium flex items-center gap-1">
+            <span class="material-icons text-[10px] text-[#7C3AED] leading-none">mic</span>
+            {{ currentlyOnAir().host }} · <span class="text-[#00E5AB] font-bold">87,9 FM</span>
+          </p>
         </div>
       </div>
 
-      <!-- Playback control decks -->
+      <!-- Playback control -->
       <div class="flex items-center gap-3.5 flex-shrink-0">
-        <button (click)="selectTrack((currentTrackIndex() - 1 + tracks().length) % tracks().length)" class="text-[#A1A1AA] hover:text-white p-1 rounded-full transition-colors focus:outline-none" title="Anterior">
-          <span class="material-icons text-lg leading-none">skip_previous</span>
-        </button>
-
         <button (click)="togglePlay()" class="h-11 w-11 bg-gradient-to-r from-[#7C3AED] to-[#EC4899] text-white rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-105 active:scale-95 focus:outline-none relative border-glow-purple cursor-pointer shadow-lg border-none">
           @if (isConnecting()) {
           <span class="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
@@ -957,11 +848,7 @@
           }
         </button>
 
-        <button (click)="selectTrack((currentTrackIndex() + 1) % tracks().length)" class="text-[#A1A1AA] hover:text-white p-1 rounded-full transition-colors focus:outline-none" title="Próximo">
-          <span class="material-icons text-lg leading-none">skip_next</span>
-        </button>
-
-        <div class="hidden md:flex items-center gap-2 bg-[#0B0F1A] px-3 py-1.5 rounded-full border border-[#1A1F2E] shrink-0 ml-2">
+        <div class="hidden md:flex items-center gap-2 bg-[#0B0F1A] px-3 py-1.5 rounded-full border border-[#1A1F2E] shrink-0">
           <button (click)="toggleMute()" class="text-[#A1A1AA] hover:text-white focus:outline-none">
             <span class="material-icons text-sm leading-none">
               {{ isMuted() || currentVolume() === 0 ? 'volume_off' : (currentVolume() < 0.4 ? 'volume_down' : 'volume_up') }}

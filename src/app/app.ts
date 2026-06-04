@@ -85,6 +85,7 @@ export interface ListenerMessage {
 })
 export class App implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('visualizerCanvas', { static: false }) visualizerCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('radioPlayer', { static: false }) radioPlayer?: ElementRef<HTMLAudioElement>;
 
   // Audio elements
   private audio: HTMLAudioElement | null = null;
@@ -110,20 +111,27 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
   tracks = signal<Track[]>([
     {
       id: 0,
+      title: 'Rádio Local 87,9 FM — Ao Vivo',
+      artist: 'Edmar Cardoso',
+      url: 'https://stm11.srvvox.com.br:7080/stream',
+      isLive: true,
+    },
+    {
+      id: 1,
       title: 'Demonstração de Áudio HD (Canal Teste)',
       artist: 'Sintonia Digital Pública',
       url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
       isLive: false,
     },
     {
-      id: 1,
+      id: 2,
       title: 'Ambient Chill Lofi Synth',
       artist: 'Digital Echoes',
       url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
       isLive: false,
     },
     {
-      id: 2,
+      id: 3,
       title: 'Corporate Inspiring Theme',
       artist: 'Nordic Soundscapes',
       url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
@@ -474,9 +482,8 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
     effect(() => {
       const vol = this.currentVolume();
       const mute = this.isMuted();
-      if (this.audio) {
-        this.audio.volume = mute ? 0 : vol;
-      }
+      const radio = this.radioPlayer?.nativeElement;
+      if (radio) radio.volume = mute ? 0 : vol;
     });
   }
 
@@ -552,103 +559,44 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
 
     // Start painting visualize loop
     this.startVisualizationLoop();
+
+    // Sync native radio player state with signals
+    const radio = this.radioPlayer?.nativeElement;
+    if (radio) {
+      radio.addEventListener('playing', () => { this.isConnecting.set(false); this.isPlaying.set(true); });
+      radio.addEventListener('pause', () => this.isPlaying.set(false));
+      radio.addEventListener('waiting', () => this.isConnecting.set(true));
+      radio.addEventListener('canplay', () => this.isConnecting.set(false));
+      radio.addEventListener('error', () => { this.isConnecting.set(false); this.isPlaying.set(false); });
+    }
   }
 
   ngOnDestroy() {
     if (this.animationId) {
       cancelAnimationFrame(this.animationId);
     }
-    if (this.audio) {
-      this.audio.pause();
-      this.audio.src = '';
-      this.audio = null;
-    }
   }
 
   // Audio actions
   togglePlay() {
+    if (!isPlatformBrowser(this.platformId)) return;
+    const radio = this.radioPlayer?.nativeElement;
+    if (!radio) return;
     this.playError.set(null);
 
-    // Dynamic browser audio construction
-    if (!this.audio) {
+    if (this.isPlaying()) {
+      radio.pause();
+    } else {
       this.isConnecting.set(true);
-      const track = this.currentTrack();
-      this.audio = new Audio(track.url);
-      this.audio.preload = 'none';
-      this.audio.crossOrigin = 'anonymous';
-
-      // Setup audio event listeners
-      this.audio.addEventListener('canplay', () => {
-        this.isConnecting.set(false);
-      });
-
-      this.audio.addEventListener('waiting', () => {
-        this.isConnecting.set(true);
-      });
-
-      this.audio.addEventListener('playing', () => {
-        this.isConnecting.set(false);
-        this.isPlaying.set(true);
-      });
-
-      this.audio.addEventListener('pause', () => {
-        this.isPlaying.set(false);
-      });
-
-      this.audio.onplay = () => {
-        this.isPlaying.set(true);
-      };
-
-      this.audio.onerror = (e) => {
-        console.error('Audio load/play failure:', e);
+      radio.volume = this.isMuted() ? 0 : this.currentVolume();
+      radio.play().catch((err) => {
+        console.error('Play error:', err);
         this.isConnecting.set(false);
         this.isPlaying.set(false);
         this.playError.set(
-          'Não foi possível conectar ao servidor de streaming ao vivo. Tentando novamente ou selecione outra faixa de teste abaixo.'
+          'Toque no player acima para iniciar a transmissão ou verifique sua conexão.'
         );
-      };
-
-      // Periodic timer for current track position (only if not live)
-      this.audio.addEventListener('timeupdate', () => {
-        if (this.audio && !this.currentTrack().isLive) {
-          const currentTime = this.audio.currentTime;
-          const duration = this.audio.duration || 0;
-          this.playbackTime.set(this.formatTime(currentTime));
-          this.trackDuration.set(this.formatTime(duration));
-        } else {
-          this.playbackTime.set('Estúdio');
-          this.trackDuration.set('Ao Vivo');
-        }
       });
-    }
-
-    if (this.isPlaying()) {
-      this.audio.pause();
-      this.isPlaying.set(false);
-    } else {
-      this.isConnecting.set(true);
-      // Re-apply configurations
-      this.audio.volume = this.isMuted() ? 0 : this.currentVolume();
-
-      // If live, reload stream source to clear buffer/sync with real live broadcast
-      if (this.currentTrack().isLive) {
-        this.audio.src = this.currentTrack().url;
-        this.audio.load();
-      }
-
-      this.audio.play()
-        .then(() => {
-          this.isPlaying.set(true);
-          this.isConnecting.set(false);
-        })
-        .catch((err) => {
-          console.error('Play permission error:', err);
-          this.isConnecting.set(false);
-          this.isPlaying.set(false);
-          this.playError.set(
-            'Ops! É preciso interagir com a página primeiro para tocar, ou a rádio está em manutenção temporária. Tente novamente clicando no play!'
-          );
-        });
     }
   }
 
