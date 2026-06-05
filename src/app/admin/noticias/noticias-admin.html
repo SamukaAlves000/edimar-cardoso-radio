@@ -1,0 +1,127 @@
+<div class="p-6 space-y-6 max-w-5xl">
+  <div>
+    <h2 class="text-lg font-black text-white uppercase tracking-widest">Notícias</h2>
+    <p class="text-[11px] text-[#A1A1AA] font-semibold mt-0.5">Cadastrar e gerenciar boletins</p>
+  </div>
+
+  <!-- Form -->
+  <div class="bg-[#111827] border border-[#1A1F2E] rounded-2xl p-6 space-y-4">
+    <h3 class="text-xs font-black uppercase tracking-widest flex items-center gap-2"
+      [ngClass]="editingId() ? 'text-[#EC4899]' : 'text-[#7C3AED]'">
+      <span class="material-icons text-sm leading-none">{{ editingId() ? 'edit' : 'add_circle' }}</span>
+      {{ editingId() ? 'Editar Notícia' : 'Nova Notícia' }}
+    </h3>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="sm:col-span-2">
+        <span class="block text-[10px] font-black text-[#A1A1AA] uppercase mb-1.5">Título *</span>
+        <input [formControl]="form.controls.titulo" type="text" placeholder="Título da notícia..."
+          class="w-full bg-[#0B0F1A] border border-[#1A1F2E] rounded-xl px-4 py-2.5 text-white text-xs focus:outline-none focus:border-[#7C3AED] font-medium" />
+        @if (form.controls.titulo.touched && form.controls.titulo.invalid) {
+          <p class="text-[9px] text-[#EC4899] mt-1">Título obrigatório (mín. 5 caracteres).</p>
+        }
+      </div>
+      <div class="sm:col-span-2">
+        <span class="block text-[10px] font-black text-[#A1A1AA] uppercase mb-1.5">Descrição / Resumo *</span>
+        <textarea [formControl]="form.controls.descricao" rows="3" placeholder="Resumo da notícia..."
+          class="w-full bg-[#0B0F1A] border border-[#1A1F2E] rounded-xl px-4 py-2.5 text-white text-xs focus:outline-none focus:border-[#7C3AED] font-medium resize-none"></textarea>
+        @if (form.controls.descricao.touched && form.controls.descricao.invalid) {
+          <p class="text-[9px] text-[#EC4899] mt-1">Descrição obrigatória (mín. 10 caracteres).</p>
+        }
+      </div>
+      <div>
+        <span class="block text-[10px] font-black text-[#A1A1AA] uppercase mb-1.5">Upload de Imagem</span>
+        <label class="flex items-center gap-2 cursor-pointer bg-[#0B0F1A] border border-dashed border-[#1A1F2E] hover:border-[#7C3AED] rounded-xl px-4 py-3 transition-all">
+          <span class="material-icons text-[#7C3AED] text-sm leading-none">cloud_upload</span>
+          <span class="text-xs text-[#A1A1AA] font-semibold">{{ saving() ? 'Enviando...' : 'Selecionar imagem' }}</span>
+          <input type="file" accept="image/*" (change)="onFileSelect($event)" class="hidden" [disabled]="saving()" />
+        </label>
+        @if (form.controls.imagemUrl.value) {
+          <p class="text-[9px] text-[#00E5AB] mt-1 truncate flex items-center gap-1">
+            <span class="material-icons text-[10px]">check_circle</span>Imagem carregada
+          </p>
+        }
+      </div>
+      <div class="flex flex-col justify-between">
+        @if (previewUrl()) {
+          <div class="h-20 rounded-xl overflow-hidden border border-[#1A1F2E]">
+            <img [src]="previewUrl()!" class="w-full h-full object-cover" alt="Preview" />
+          </div>
+        }
+        <label class="flex items-center gap-2 cursor-pointer mt-auto">
+          <input type="checkbox" [formControl]="form.controls.ativo" class="accent-[#7C3AED] w-4 h-4" />
+          <span class="text-xs text-white font-bold">Publicar (ativo no site)</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="flex gap-2 pt-2 border-t border-[#1A1F2E]">
+      <button (click)="save()" [disabled]="saving()"
+        class="bg-gradient-to-r from-[#7C3AED] to-[#EC4899] text-white font-black py-2.5 px-6 rounded-xl text-xs uppercase tracking-widest cursor-pointer border-none disabled:opacity-50 flex items-center gap-1.5">
+        <span class="material-icons text-sm leading-none">{{ saving() ? 'hourglass_empty' : 'save' }}</span>
+        {{ saving() ? 'Salvando...' : (editingId() ? 'Salvar Edição' : 'Publicar Notícia') }}
+      </button>
+      @if (editingId()) {
+        <button (click)="cancelEdit()" class="bg-[#0B0F1A] hover:bg-[#1A1F2E] text-[#A1A1AA] font-bold py-2.5 px-5 rounded-xl text-xs border border-[#1A1F2E] cursor-pointer transition-all">
+          Cancelar
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- List -->
+  @if (loading()) {
+  <div class="flex items-center justify-center py-12 text-[#A1A1AA] gap-3">
+    <span class="h-5 w-5 border-2 border-[#7C3AED] border-t-transparent rounded-full animate-spin"></span>
+    Carregando notícias...
+  </div>
+  } @else {
+  <div class="space-y-3">
+    @for (n of noticias(); track n.id) {
+    <div class="bg-[#111827] border border-[#1A1F2E] hover:border-[#7C3AED]/20 rounded-2xl p-4 flex gap-4 items-start transition-all">
+      <div class="h-16 w-16 rounded-xl bg-[#0B0F1A] overflow-hidden shrink-0 border border-[#1A1F2E]">
+        @if (n.imagemUrl) {
+          <img [src]="n.imagemUrl" class="h-full w-full object-cover" alt="" />
+        } @else {
+          <div class="h-full w-full flex items-center justify-center">
+            <span class="material-icons text-[#7C3AED]">image</span>
+          </div>
+        }
+      </div>
+      <div class="flex-1 min-w-0 space-y-1">
+        <div class="flex items-center gap-2 flex-wrap">
+          <p class="text-sm font-bold text-white">{{ n.titulo }}</p>
+          <span class="text-[8px] px-1.5 py-0.5 rounded font-black uppercase"
+            [ngClass]="n.ativo ? 'bg-[#00E5AB]/10 text-[#00E5AB]' : 'bg-red-950/30 text-red-400'">
+            {{ n.ativo ? 'Ativo' : 'Inativo' }}
+          </span>
+        </div>
+        <p class="text-[11px] text-[#A1A1AA] line-clamp-2 leading-relaxed">{{ n.descricao }}</p>
+        <p class="text-[10px] text-[#A1A1AA] font-mono">{{ formatDate(n.createdAt) }}</p>
+      </div>
+      <div class="flex flex-col gap-2 shrink-0">
+        <button (click)="editNoticia(n)" title="Editar"
+          class="p-2 bg-[#7C3AED]/10 hover:bg-[#7C3AED]/20 text-[#7C3AED] rounded-lg border border-[#7C3AED]/20 cursor-pointer transition-all">
+          <span class="material-icons text-sm leading-none">edit</span>
+        </button>
+        <button (click)="toggleAtivo(n)" [title]="n.ativo ? 'Desativar' : 'Ativar'"
+          class="p-2 rounded-lg border cursor-pointer transition-all"
+          [ngClass]="n.ativo ? 'bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-400 border-yellow-500/20' : 'bg-[#00E5AB]/10 hover:bg-[#00E5AB]/20 text-[#00E5AB] border-[#00E5AB]/20'">
+          <span class="material-icons text-sm leading-none">{{ n.ativo ? 'visibility_off' : 'visibility' }}</span>
+        </button>
+        <button (click)="excluir(n.id)" title="Excluir"
+          class="p-2 bg-red-950/30 hover:bg-red-950/50 text-red-400 rounded-lg border border-red-500/20 cursor-pointer transition-all">
+          <span class="material-icons text-sm leading-none">delete</span>
+        </button>
+      </div>
+    </div>
+    } @empty {
+    <div class="bg-[#111827] border border-[#1A1F2E] rounded-2xl p-12 text-center text-[#A1A1AA] space-y-2">
+      <span class="material-icons text-4xl">newspaper</span>
+      <p class="text-sm">Nenhuma notícia cadastrada.</p>
+      <p class="text-xs">Use o formulário acima para publicar a primeira.</p>
+    </div>
+    }
+  </div>
+  }
+</div>

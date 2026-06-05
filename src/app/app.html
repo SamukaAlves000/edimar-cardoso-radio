@@ -1,3 +1,5 @@
+<router-outlet />
+@if (!isAdminRoute()) {
 @if (toastMessage()) {
 <div class="fixed bottom-24 right-4 z-50 bg-[#111827] border border-[#7C3AED]/30 text-white text-xs px-4 py-3.5 rounded-xl shadow-2xl flex items-center gap-3 animate-bounce max-w-sm border-glow-purple">
   <div class="h-8 w-8 bg-[#7C3AED]/10 rounded-full flex items-center justify-center flex-shrink-0">
@@ -56,9 +58,9 @@
         <div>
           <div class="flex items-baseline gap-1.5 leading-none">
             <h1 class="text-base font-black tracking-widest text-white uppercase">
-              RÁDIO <span class="bg-gradient-to-r from-[#7C3AED] via-[#EC4899] to-[#00E5AB] bg-clip-text text-transparent">LOCAL</span>
+              RÁDIO <span class="bg-gradient-to-r from-[#7C3AED] via-[#EC4899] to-[#00E5AB] bg-clip-text text-transparent">CAMPOS BELOS DIGITAL</span>
             </h1>
-            <span class="text-[10px] font-mono text-[#00E5AB] font-bold">87,9 FM</span>
+            <span class="text-[10px] font-mono text-[#00E5AB] font-bold">WEB</span>
           </div>
           <p class="text-[8px] text-[#A1A1AA] font-black uppercase tracking-wider select-none">Web Broadcast Digital</p>
         </div>
@@ -87,9 +89,9 @@
             <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.73-1.451L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.851-4.106 9.855-9.15.002-2.443-.949-4.739-2.677-6.471C16.924 3.25 14.636 2.3 12.2 2.3c-5.444 0-9.866 4.41-9.87 9.456-.002 2.085.547 4.122 1.59 5.895L2.854 21.2l3.793-.946z" /></svg>
           </a>
         </div>
-        <button (click)="showAdminPanel.set(!showAdminPanel())" class="bg-[#111827] hover:bg-[#1A1F2E] text-slate-300 p-2.5 rounded-full transition-colors flex items-center justify-center border border-[#1A1F2E]" title="Painel Radialista">
+        <a routerLink="/admin" class="bg-[#111827] hover:bg-[#1A1F2E] text-slate-300 p-2.5 rounded-full transition-colors flex items-center justify-center border border-[#1A1F2E]" title="Painel Administrativo">
           <span class="material-icons text-sm leading-none">settings</span>
-        </button>
+        </a>
       </div>
     </div>
   </header>
@@ -127,7 +129,7 @@
       <div class="space-y-6">
         <div class="flex items-center justify-between border-b border-[#1A1F2E] pb-4">
           <span class="text-xs font-bold text-[#00E5AB] flex items-center gap-2">
-            <span class="h-2 w-2 rounded-full bg-[#00E5AB] animate-pulse"></span> Radialista: Edmar Cardoso (Sintonizado)
+            <span class="h-2 w-2 rounded-full bg-[#00E5AB] animate-pulse"></span> Radialista: Edimar Cardoso (Sintonizado)
           </span>
           <button (click)="logoutAdmin()" class="text-xs text-red-400 hover:text-red-500 font-extrabold uppercase tracking-widest">
             Desconectar
@@ -288,7 +290,7 @@
         <!-- Graphic container with host and capsule status -->
         <div class="relative w-full lg:w-[380px] shrink-0 rounded-3xl overflow-hidden shadow-lg border border-white/5">
           <!-- Image shown in full — defines the container height -->
-          <img src="/edimar.png" alt="Edmar Direct Studio" class="w-full h-auto block bg-slate-900 group-hover:scale-[1.01] transition-transform duration-700" referrerpolicy="no-referrer" />
+          <img src="/edimar2.png" alt="Edmar Direct Studio" class="w-full h-auto block bg-slate-900 group-hover:scale-[1.01] transition-transform duration-700" referrerpolicy="no-referrer" />
 
           <!-- Overlays and badges on top of the image -->
           <div class="absolute inset-0 flex flex-col justify-between p-6">
@@ -306,7 +308,7 @@
             <!-- Bottom details block -->
             <div class="relative z-10 w-full text-left space-y-2.5 bg-gradient-to-t from-black/85 via-black/40 to-transparent p-4 rounded-b-2xl">
               <div class="space-y-0.5">
-                <h3 class="text-base font-black text-white tracking-widest uppercase">EDMAR CARDOSO</h3>
+                <h3 class="text-base font-black text-white tracking-widest uppercase">EDIMAR CARDOSO</h3>
                 <p class="text-[10px] text-[#EC4899] font-black uppercase tracking-wider">A sua companhia diária!</p>
               </div>
               <div class="inline-flex items-center gap-2 bg-[#D1307A] text-white text-[9px] font-black px-3.5 py-1.5 rounded-full shadow-lg border border-white/20 animate-pulse">
@@ -407,7 +409,7 @@
 
     <!-- Banner header -->
     <div class="w-full rounded-3xl overflow-hidden shadow-lg">
-      <img src="/banner.png" alt="Campos Belos Digital" class="w-full h-auto block" referrerpolicy="no-referrer" />
+      <img src="/banner2.png" alt="Campos Belos Digital" class="w-full h-auto block" referrerpolicy="no-referrer" />
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-16 items-center">
@@ -417,18 +419,18 @@
       </div>
       
       <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
-        A história por trás do microfone de <span class="bg-gradient-to-r from-[#7C3AED] to-[#EC4899] bg-clip-text text-transparent">Edmar Cardoso</span>
+        A história por trás do microfone de <span class="bg-gradient-to-r from-[#7C3AED] to-[#EC4899] bg-clip-text text-transparent">Edimar Cardoso</span>
       </h2>
       
       <div class="text-[#E5E7EB] space-y-4 text-xs sm:text-sm leading-relaxed font-semibold">
         <p>
-          Edmar Cardoso traz no peito uma paixão inabalável pela comunicação clara e de proximidade. Com anos de dedicação na área do jornalismo, entretenimento e cultura regional, Edmar começou sua jornada carregando o compromisso de escutar as pessoas, unindo o bate-papo de qualidade, a boa música regional e os causos alegres do cotidiano.
+          Edimar Cardoso traz no peito uma paixão inabalável pela comunicação clara e de proximidade. Com anos de dedicação na área do jornalismo, entretenimento e cultura regional, Edimar começou sua jornada carregando o compromisso de escutar as pessoas, unindo o bate-papo de qualidade, a boa música regional e os causos alegres do cotidiano.
         </p>
         <p>
           A rádio sintoniza o calor de uma transmissão viva, profissional e sutilmente desenhada para embalar sua rotina. Nosso estúdio digital atua como um polo de inovação na transmissão pela internet com alta fidelidade e conectividade instantânea.
         </p>
         <p class="italic text-[#A1A1AA] border-l-2 border-[#7C3AED] pl-3">
-          "A comunicação bem feita aproxima distâncias de forma mágica. O rádio digital aproxima o ouvinte das nossas principais pautas com som de estúdio a qualquer hora do dia", expressa Edmar Cardoso.
+          "A comunicação bem feita aproxima distâncias de forma mágica. O rádio digital aproxima o ouvinte das nossas principais pautas com som de estúdio a qualquer hora do dia", expressa Edimar Cardoso.
         </p>
       </div>
 
@@ -469,7 +471,7 @@
             EC
           </div>
           <div>
-            <h5 class="text-xs font-bold text-white leading-tight">Edmar Cardoso</h5>
+            <h5 class="text-xs font-bold text-white leading-tight">Edimar Cardoso</h5>
             <p class="text-[9px] text-[#7C3AED] font-black uppercase tracking-wider">Radialista & Diretor</p>
           </div>
         </div>
@@ -536,7 +538,7 @@
         </div>
         <h2 class="text-3xl font-extrabold text-white tracking-tight">Mande seu abraço e peça suas músicas</h2>
         <p class="text-[#A1A1AA] text-xs sm:text-sm leading-relaxed font-medium">
-          Deseja saudar seus amigos ou pedir sua música favorita? Complete os dados de contato abaixo. Edmar Cardoso e toda a bancada lerão seu recado na transmissão!
+          Deseja saudar seus amigos ou pedir sua música favorita? Complete os dados de contato abaixo. Edimar Cardoso e toda a bancada lerão seu recado na transmissão!
         </p>
 
         <form [formGroup]="recadoForm" (ngSubmit)="sendRecado()" class="bg-[#111827] p-6 sm:p-8 rounded-3xl border border-[#1A1F2E] space-y-4 shadow-clean">
@@ -694,9 +696,9 @@
 
       <div class="p-6 sm:p-8 space-y-5">
         <h3 class="text-lg sm:text-xl font-bold text-white tracking-tight leading-snug">{{ selectedNews()?.title }}</h3>
-        <p class="text-[#A1A1AA] font-bold text-xs italic pl-3 border-l-2 border-[#7C3AED] leading-relaxed">
-          {{ selectedNews()?.summary }}
-        </p>
+<!--        <p class="text-[#A1A1AA] font-bold text-xs italic pl-3 border-l-2 border-[#7C3AED] leading-relaxed">-->
+<!--          {{ selectedNews()?.summary }}-->
+<!--        </p>-->
         <div class="text-xs text-slate-200 leading-relaxed space-y-3 font-semibold pb-4 border-b border-[#1A1F2E]">
           <p class="whitespace-pre-line">{{ selectedNews()?.content }}</p>
         </div>
@@ -716,102 +718,38 @@
   </div>
   }
 
-  <!-- AGENDA COBERTURAS & FLASHES -->
-  <section id="eventos" class="max-w-7xl mx-auto py-20 px-4">
-    <div class="text-center space-y-2 mb-12">
-      <span class="text-[10px] text-[#00E5AB] font-black uppercase tracking-widest pl-0.5">FLASHES E COBERTURAS EXTERNAS</span>
-      <h2 class="text-3xl font-black text-white tracking-tight">Flashes ao vivo & Eventos Municipais</h2>
-      <p class="text-[#A1A1AA] text-xs max-w-sm mx-auto leading-relaxed">Acompanhe as pautas, feiras produtivas e eventos acompanhados em tempo real pela nossa equipe externa:</p>
-    </div>
+  <!-- SPONSORS MARQUEE -->
+  @if (sponsors().length > 0) {
+  <section id="patrocinadores" class="py-14 bg-[#111827] border-t border-[#1A1F2E]/60 overflow-hidden">
+    <p class="text-center text-[9px] uppercase font-black text-[#A1A1AA] tracking-widest mb-8">Apoiadores &amp; Parceiros</p>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      @for (evt of events(); track evt.id) {
-      <div class="bg-[#111827] border border-[#1A1F2E] hover:border-[#7C3AED]/30 rounded-2xl overflow-hidden transition-all flex flex-col justify-between text-left group">
-        <div class="bg-[#0B0F1A] p-5 border-b border-[#1A1F2E] flex justify-between items-start">
-          <div class="space-y-0.5">
-            <span class="text-[8px] font-black tracking-widest text-[#7C3AED] uppercase">Flash Cobertura</span>
-            <span class="block font-mono text-[10px] text-[#A1A1AA] font-bold">{{ evt.date }}</span>
-          </div>
-          <span class="bg-[#2A134D]/50 border border-[#7C3AED]/30 text-[#00E5AB] text-[8px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-            Breve
-          </span>
-        </div>
+    <div class="flex items-center overflow-hidden relative">
+      <div class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#111827] to-transparent z-10 pointer-events-none"></div>
+      <div class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#111827] to-transparent z-10 pointer-events-none"></div>
 
-        <div class="p-6 space-y-4">
-          <h3 class="text-sm font-bold text-white leading-snug group-hover:text-[#EC4899] transition-colors">{{ evt.title }}</h3>
-          <p class="text-xs text-[#A1A1AA] leading-relaxed font-semibold">{{ evt.description }}</p>
-
-          <div class="pt-3 border-t border-[#1A1F2E]/80 text-[10px] space-y-1.5 text-slate-300 font-bold">
-            <p class="flex items-center gap-1.5"><span class="material-icons text-[#00E5AB] text-xs leading-none">place</span> Ponto: <strong class="text-white font-bold">{{ evt.location }}</strong></p>
-            <p class="flex items-center gap-1.5"><span class="material-icons text-[#00E5AB] text-xs leading-none">schedule</span> horário: <strong class="text-white font-bold">{{ evt.time }} Horas</strong></p>
-          </div>
-        </div>
-
-        <div class="p-6 pt-0">
-          <button (click)="openEventDetails(evt)" class="w-full bg-[#0B0F1A] hover:bg-[#1A1F2E] border border-[#1A1F2E] text-[#A1A1AA] hover:text-white font-bold py-2.5 rounded-xl text-xs transition-colors flex items-center justify-center gap-1.5 focus:outline-none cursor-pointer">
-            <span class="material-icons text-sm">info</span> Ativar Lembrete / Saber Mais
-          </button>
-        </div>
-      </div>
-      }
-    </div>
-  </section>
-
-  <!-- Event modal overlay -->
-  @if (activeEvent()) {
-  <div class="fixed inset-0 z-50 bg-[#0B0F1A]/80 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-[#111827] border border-[#1A1F2E] rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-5 shadow-2xl relative text-left">
-      <button (click)="closeEventModal()" class="absolute top-4 right-4 text-[#A1A1AA] hover:text-white focus:outline-none">
-        <span class="material-icons">close</span>
-      </button>
-
-      <span class="text-[9px] text-[#EC4899] font-black uppercase tracking-widest pl-0.5">Detalhes da Transmissão Especial</span>
-      <h3 class="text-base sm:text-lg font-bold text-white tracking-tight leading-tight mb-2">{{ activeEvent()?.title }}</h3>
-      <p class="text-slate-300 text-xs leading-relaxed font-semibold">{{ activeEvent()?.description }}</p>
-      
-      <div class="bg-[#0B0F1A] p-4 rounded-xl border border-[#1A1F2E] space-y-2 text-xs text-slate-300">
-        <p class="flex items-center gap-2"><span class="material-icons text-sm text-[#00E5AB]">today</span> Data do Evento: <strong class="text-white">{{ activeEvent()?.date }}</strong></p>
-        <p class="flex items-center gap-2"><span class="material-icons text-sm text-[#00E5AB]">place</span> Local Cobertura: <strong class="text-white">{{ activeEvent()?.location }}</strong></p>
-        <p class="flex items-center gap-2"><span class="material-icons text-sm text-[#00E5AB]">schedule</span> Horário: <strong class="text-white">{{ activeEvent()?.time }} Horas (Brasília)</strong></p>
-      </div>
-
-      <div class="flex flex-col sm:flex-row gap-2 pt-2">
-        <button (click)="showToast('Lembrete de transmissão ativado!'); closeEventModal()" class="flex-1 bg-gradient-to-r from-[#7C3AED] to-[#EC4899] text-white font-black py-3 px-4 rounded-xl text-xs transition-transform transform active:scale-95 shadow-md flex items-center justify-center gap-1.5 focus:outline-none border-none cursor-pointer">
-          <span class="material-icons text-sm">notifications_active</span> Receber Lembrete Digital
-        </button>
-        <button (click)="closeEventModal()" class="bg-[#0B0F1A] hover:bg-[#1A1F2E] text-slate-400 hover:text-white font-bold py-3 px-6 rounded-xl text-xs transition-colors border border-[#1A1F2E] focus:outline-none">
-          Fechar
-        </button>
-      </div>
-    </div>
-  </div>
-  }
-
-  <!-- SPONSORS BRAND SLATS -->
-  <section id="patrocinadores" class="py-16 bg-[#111827] border-t border-[#1A1F2E]/60">
-    <div class="max-w-7xl mx-auto px-4 text-center space-y-10">
-      <div class="space-y-1.5">
-        <h2 class="text-[9px] uppercase font-black text-[#A1A1AA] tracking-widest">NOSSOS APOIADORES E PARCEIROS</h2>
-        <p class="text-xs text-[#A1A1AA] font-bold">Dedicamos carinho especial às marcas que patrocinam nossa transmissão:</p>
-      </div>
-
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4" id="sponsors-grid-wrapper">
+      <div class="sponsors-track">
         @for (sp of sponsors(); track sp.id) {
-        <a [href]="sp.url" class="relative group p-5 bg-[#0B0F1A] border border-[#1A1F2E] rounded-2xl hover:border-[#7C3AED]/30 transition-all text-center flex flex-col justify-between shadow-sm h-36">
-          <div class="space-y-3 flex flex-col justify-between h-full">
-            <div class="h-9 w-9 mx-auto rounded-lg flex items-center justify-center text-[10px] font-black" [ngClass]="sp.colorClass.includes('from-blue') ? 'bg-[#4F46E5]/10 text-[#4F46E5]' : (sp.colorClass.includes('from-amber') ? 'bg-yellow-500/10 text-yellow-500' : (sp.colorClass.includes('from-rose') ? 'bg-[#EC4899]/10 text-[#EC4899]' : 'bg-[#7C3AED]/10 text-[#7C3AED]'))">
-              {{ sp.name.substring(0, 2).toUpperCase() }}
-            </div>
-            <div class="min-w-0">
-              <h4 class="text-[11px] font-bold text-white group-hover:text-[#EC4899] transition-colors truncate">{{ sp.name }}</h4>
-              <p class="text-[8px] text-[#A1A1AA] font-bold uppercase tracking-wider truncate mt-0.5">{{ sp.category }}</p>
-            </div>
-          </div>
-        </a>
+          @if (sp.logoUrl) {
+            <a [href]="sp.url" target="_blank" rel="noopener" class="px-10 py-4 block">
+              <img [src]="sp.logoUrl" [alt]="sp.name" class="h-44 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity duration-300 cursor-pointer" />
+            </a>
+          } @else {
+            <a [href]="sp.url" target="_blank" rel="noopener" class="px-10 py-4 text-xl font-black text-[#A1A1AA] hover:text-white transition-colors whitespace-nowrap tracking-tight">{{ sp.name }}</a>
+          }
+        }
+        @for (sp of sponsors(); track 'd' + sp.id) {
+          @if (sp.logoUrl) {
+            <a [href]="sp.url" target="_blank" rel="noopener" tabindex="-1" class="px-10 py-4 block">
+              <img [src]="sp.logoUrl" [alt]="sp.name" class="h-44 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity duration-300 cursor-pointer" />
+            </a>
+          } @else {
+            <a [href]="sp.url" target="_blank" rel="noopener" tabindex="-1" class="px-10 py-4 text-xl font-black text-[#A1A1AA] hover:text-white transition-colors whitespace-nowrap tracking-tight">{{ sp.name }}</a>
+          }
         }
       </div>
     </div>
   </section>
+  }
 
   <!-- PERSISTENT FLOATING AUDIO BAR DECK -->
   <div class="fixed bottom-0 left-0 right-0 z-40 bg-[#111827]/95 backdrop-blur-md border-t border-[#1A1F2E] shadow-clean py-3 px-4 transition-all">
@@ -822,7 +760,7 @@
         <div class="relative flex-shrink-0">
           <div class="absolute -inset-1 bg-gradient-to-r from-[#7C3AED] to-[#EC4899] rounded-2xl blur-xs animate-pulse opacity-20"></div>
           <div class="relative h-11 w-11 rounded-xl bg-[#0B0F1A] border border-[#1A1F2E] overflow-hidden flex items-center justify-center">
-            <img src="/edimar.png" alt="Edmar Cardoso" class="h-full w-full object-cover rounded-xl" />
+            <img src="/edimar2.png" alt="Edmar Cardoso" class="h-full w-full object-cover rounded-xl" />
           </div>
         </div>
         <div class="min-w-0">
@@ -882,7 +820,7 @@
           APLICATIVO DISPONÍVEL
         </div>
         <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight leading-tight">
-          Leve a Rádio Local<br/>
+          Leve a Rádio Campos Belos Digital<br/>
           <span class="bg-gradient-to-r from-[#7C3AED] via-[#EC4899] to-[#00E5AB] bg-clip-text text-transparent">no seu bolso, de graça</span>
         </h2>
         <p class="text-[#A1A1AA] text-xs sm:text-sm leading-relaxed max-w-md mx-auto font-semibold">
@@ -936,7 +874,7 @@
             <span class="w-[2px] h-5 bg-[#00E5AB] rounded-full"></span>
             <span class="w-[2px] h-3 bg-[#4F46E5] rounded-full"></span>
           </div>
-          <h3 class="text-xs font-black text-white tracking-widest uppercase">RÁDIO LOCAL 87,9 FM</h3>
+          <h3 class="text-xs font-black text-white tracking-widest uppercase">RÁDIO CAMPOS BELOS DIGITAL</h3>
         </div>
         <p class="text-xs leading-relaxed max-w-sm font-semibold">
           Conectando as pessoas de Goiás, Tocantins e sintonizados de todo o Brasil com o calor regional da voz e som digital livre de ruídos.
@@ -957,10 +895,11 @@
         <h4 class="text-xs font-black text-white uppercase tracking-widest">Informações</h4>
         <div class="flex flex-col gap-2 text-xs font-semibold">
           <p class="flex items-center gap-1.5"><span class="material-icons text-xs text-[#00E5AB]">place</span> Campos Belos - GO</p>
-          <p class="flex items-center gap-1.5"><span class="material-icons text-xs text-[#00E5AB]">email</span> contato&#64;radiolocalcamposbelos.com</p>
-          <p class="text-[10px] text-[#A1A1AA] font-mono mt-2 select-none">© 2026 Rádio Local. Todos os Direitos Reservados.</p>
+          <p class="flex items-center gap-1.5"><span class="material-icons text-xs text-[#00E5AB]">email</span> contato&#64;radiocamposbelosdigital.com</p>
+          <p class="text-[10px] text-[#A1A1AA] font-mono mt-2 select-none">© 2026 Rádio Campos Belos Digital. Todos os Direitos Reservados.</p>
         </div>
       </div>
     </div>
   </footer>
 </div>
+}

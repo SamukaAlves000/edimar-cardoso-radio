@@ -1,0 +1,143 @@
+<div class="p-6 space-y-6 max-w-5xl">
+  <div>
+    <h2 class="text-lg font-black text-white uppercase tracking-widest">Patrocinadores</h2>
+    <p class="text-[11px] text-[#A1A1AA] font-semibold mt-0.5">Parceiros e apoiadores da rádio</p>
+  </div>
+
+  <!-- Form -->
+  <div class="bg-[#111827] border border-[#1A1F2E] rounded-2xl p-6 space-y-4">
+    <h3 class="text-xs font-black uppercase tracking-widest flex items-center gap-2"
+      [ngClass]="editingId() ? 'text-[#EC4899]' : 'text-[#7C3AED]'">
+      <span class="material-icons text-sm leading-none">{{ editingId() ? 'edit' : 'add_circle' }}</span>
+      {{ editingId() ? 'Editar Patrocinador' : 'Novo Patrocinador' }}
+    </h3>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <span class="block text-[10px] font-black text-[#A1A1AA] uppercase mb-1.5">Nome *</span>
+        <input [formControl]="form.controls.nome" type="text" placeholder="Nome da empresa..."
+          class="w-full bg-[#0B0F1A] rounded-xl px-4 py-2.5 text-white text-xs focus:outline-none font-medium border"
+          [ngClass]="form.controls.nome.invalid && form.controls.nome.touched ? 'border-red-500 focus:border-red-500' : 'border-[#1A1F2E] focus:border-[#7C3AED]'" />
+        @if (form.controls.nome.invalid && form.controls.nome.touched) {
+          <p class="text-[10px] text-red-400 mt-1 flex items-center gap-1">
+            <span class="material-icons text-[10px]">error_outline</span>
+            {{ form.controls.nome.hasError('required') ? 'Nome é obrigatório' : 'Mínimo 2 caracteres' }}
+          </p>
+        }
+      </div>
+      <div>
+        <span class="block text-[10px] font-black text-[#A1A1AA] uppercase mb-1.5">Categoria *</span>
+        <input [formControl]="form.controls.categoria" type="text" placeholder="Ex: Agronegócio..."
+          class="w-full bg-[#0B0F1A] rounded-xl px-4 py-2.5 text-white text-xs focus:outline-none font-medium border"
+          [ngClass]="form.controls.categoria.invalid && form.controls.categoria.touched ? 'border-red-500 focus:border-red-500' : 'border-[#1A1F2E] focus:border-[#7C3AED]'" />
+        @if (form.controls.categoria.invalid && form.controls.categoria.touched) {
+          <p class="text-[10px] text-red-400 mt-1 flex items-center gap-1">
+            <span class="material-icons text-[10px]">error_outline</span>
+            Categoria é obrigatória
+          </p>
+        }
+      </div>
+      <div>
+        <span class="block text-[10px] font-black text-[#A1A1AA] uppercase mb-1.5">URL do Site</span>
+        <input [formControl]="form.controls.url" type="text" placeholder="https://..."
+          class="w-full bg-[#0B0F1A] border border-[#1A1F2E] rounded-xl px-4 py-2.5 text-white text-xs focus:outline-none focus:border-[#7C3AED] font-medium" />
+      </div>
+      <div class="flex items-end pb-1">
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" [formControl]="form.controls.ativo" class="accent-[#7C3AED] w-4 h-4" />
+          <span class="text-xs text-white font-bold">Ativo (visível no site público)</span>
+        </label>
+      </div>
+      <div>
+        <span class="block text-[10px] font-black text-[#A1A1AA] uppercase mb-1.5">Logo / Imagem</span>
+        <label class="flex items-center gap-2 cursor-pointer bg-[#0B0F1A] border border-dashed border-[#1A1F2E] hover:border-[#7C3AED] rounded-xl px-4 py-3 transition-all">
+          <span class="material-icons text-[#7C3AED] text-sm leading-none">cloud_upload</span>
+          <span class="text-xs text-[#A1A1AA] font-semibold">{{ saving() ? 'Enviando...' : 'Selecionar logo' }}</span>
+          <input type="file" accept="image/*" (change)="onFileSelect($event)" class="hidden" [disabled]="saving()" />
+        </label>
+        @if (form.controls.logoUrl.value) {
+          <p class="text-[9px] text-[#00E5AB] mt-1 flex items-center gap-1">
+            <span class="material-icons text-[10px]">check_circle</span>Logo carregada
+          </p>
+        }
+      </div>
+      @if (previewUrl()) {
+      <div class="flex items-center">
+        <div class="h-16 w-16 rounded-xl overflow-hidden border border-[#1A1F2E] bg-[#0B0F1A]">
+          <img [src]="previewUrl()!" class="h-full w-full object-contain" alt="Preview" />
+        </div>
+      </div>
+      }
+    </div>
+
+    <div class="flex gap-2 pt-2 border-t border-[#1A1F2E]">
+      <button (click)="save()" [disabled]="saving()"
+        class="bg-gradient-to-r from-[#7C3AED] to-[#EC4899] text-white font-black py-2.5 px-6 rounded-xl text-xs uppercase tracking-widest cursor-pointer border-none disabled:opacity-50 flex items-center gap-1.5">
+        <span class="material-icons text-sm leading-none">save</span>
+        {{ saving() ? 'Salvando...' : (editingId() ? 'Salvar Edição' : 'Cadastrar') }}
+      </button>
+      @if (editingId()) {
+        <button (click)="cancel()" class="bg-[#0B0F1A] hover:bg-[#1A1F2E] text-[#A1A1AA] font-bold py-2.5 px-5 rounded-xl text-xs border border-[#1A1F2E] cursor-pointer transition-all">
+          Cancelar
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Grid list -->
+  @if (loading()) {
+  <div class="flex items-center justify-center py-12 text-[#A1A1AA] gap-3">
+    <span class="h-5 w-5 border-2 border-[#7C3AED] border-t-transparent rounded-full animate-spin"></span>
+    Carregando...
+  </div>
+  } @else {
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    @for (p of patrocinadores(); track p.id) {
+    <div class="bg-[#111827] border border-[#1A1F2E] rounded-2xl p-4 space-y-3 transition-all"
+      [ngClass]="{'opacity-60': !p.ativo}">
+      <div class="flex items-center gap-3">
+        <div class="h-12 w-12 rounded-xl bg-[#0B0F1A] border border-[#1A1F2E] overflow-hidden shrink-0 flex items-center justify-center">
+          @if (p.logoUrl) {
+            <img [src]="p.logoUrl" class="h-full w-full object-contain" alt="" />
+          } @else {
+            <span class="text-sm font-black text-[#7C3AED]">{{ p.nome.substring(0,2).toUpperCase() }}</span>
+          }
+        </div>
+        <div class="min-w-0">
+          <p class="text-sm font-bold text-white truncate">{{ p.nome }}</p>
+          <p class="text-[10px] text-[#A1A1AA] uppercase tracking-wide font-bold truncate">{{ p.categoria }}</p>
+        </div>
+      </div>
+      <div class="flex items-center justify-between">
+        <span class="text-[8px] px-1.5 py-0.5 rounded font-black uppercase"
+          [ngClass]="p.ativo ? 'bg-[#00E5AB]/10 text-[#00E5AB]' : 'bg-red-950/30 text-red-400'">
+          {{ p.ativo ? 'Ativo' : 'Inativo' }}
+        </span>
+        <p class="text-[9px] text-[#A1A1AA] font-mono">{{ formatDate(p.createdAt) }}</p>
+      </div>
+      <div class="flex gap-2 border-t border-[#1A1F2E] pt-3">
+        <button (click)="edit(p)"
+          class="flex-1 py-1.5 bg-[#7C3AED]/10 hover:bg-[#7C3AED]/20 text-[#7C3AED] rounded-lg text-[9px] font-black uppercase cursor-pointer border border-[#7C3AED]/20 flex items-center justify-center gap-1 transition-all">
+          <span class="material-icons text-xs leading-none">edit</span> Editar
+        </button>
+        <button (click)="toggleAtivo(p)"
+          class="flex-1 py-1.5 rounded-lg text-[9px] font-black uppercase cursor-pointer border flex items-center justify-center gap-1 transition-all"
+          [ngClass]="p.ativo ? 'bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-400 border-yellow-500/20' : 'bg-[#00E5AB]/10 hover:bg-[#00E5AB]/20 text-[#00E5AB] border-[#00E5AB]/20'">
+          <span class="material-icons text-xs leading-none">{{ p.ativo ? 'visibility_off' : 'visibility' }}</span>
+          {{ p.ativo ? 'Ocultar' : 'Ativar' }}
+        </button>
+        <button (click)="excluir(p.id)"
+          class="p-1.5 bg-red-950/30 hover:bg-red-950/50 text-red-400 rounded-lg border border-red-500/20 cursor-pointer transition-all">
+          <span class="material-icons text-xs leading-none">delete</span>
+        </button>
+      </div>
+    </div>
+    } @empty {
+    <div class="col-span-3 bg-[#111827] border border-[#1A1F2E] rounded-2xl p-12 text-center text-[#A1A1AA] space-y-2">
+      <span class="material-icons text-4xl">business</span>
+      <p class="text-sm">Nenhum patrocinador cadastrado.</p>
+    </div>
+    }
+  </div>
+  }
+</div>

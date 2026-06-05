@@ -1,0 +1,93 @@
+@if (!authenticated()) {
+<div class="min-h-screen bg-[#0B0F1A] flex items-center justify-center px-4">
+  <div class="w-full max-w-sm bg-[#111827] border border-[#1A1F2E] rounded-3xl p-8 shadow-2xl space-y-6">
+    <div class="text-center space-y-2">
+      <div class="flex items-center gap-[3px] h-8 justify-center mb-3">
+        <span class="w-[3px] h-3 bg-[#7C3AED] rounded-full animate-pulse"></span>
+        <span class="w-[3px] h-6 bg-[#EC4899] rounded-full animate-pulse [animation-delay:0.2s]"></span>
+        <span class="w-[3px] h-8 bg-gradient-to-t from-[#7C3AED] to-[#EC4899] rounded-full animate-pulse [animation-delay:0.4s]"></span>
+        <span class="w-[3px] h-5 bg-[#00E5AB] rounded-full animate-pulse [animation-delay:0.1s]"></span>
+        <span class="w-[3px] h-2 bg-[#4F46E5] rounded-full animate-pulse [animation-delay:0.3s]"></span>
+      </div>
+      <h1 class="text-sm font-black text-white uppercase tracking-widest">Painel Administrativo</h1>
+      <p class="text-[11px] text-[#A1A1AA] font-semibold">Rádio Campos Belos Digital</p>
+    </div>
+    <div class="space-y-3">
+      <input [formControl]="passField" (keydown.enter)="login()" type="password"
+        placeholder="Senha de acesso..."
+        class="w-full bg-[#0B0F1A] border border-[#1A1F2E] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#7C3AED] text-sm font-medium" />
+      @if (loginError()) {
+        <p class="text-xs text-red-400 flex items-center gap-1">
+          <span class="material-icons text-xs">error_outline</span>{{ loginError() }}
+        </p>
+      }
+      <button (click)="login()" class="w-full bg-gradient-to-r from-[#7C3AED] to-[#EC4899] text-white font-black py-3 rounded-xl text-xs uppercase tracking-widest cursor-pointer border-none">
+        Entrar
+      </button>
+      <a href="/" class="block text-center text-[11px] text-[#A1A1AA] hover:text-white transition-colors mt-2">← Voltar ao site</a>
+    </div>
+  </div>
+</div>
+} @else {
+<div class="min-h-screen bg-[#0B0F1A] flex font-sans text-slate-200">
+
+  <!-- Sidebar desktop -->
+  <aside class="w-56 shrink-0 bg-[#080A15] border-r border-[#1A1F2E] flex-col sticky top-0 h-screen hidden md:flex">
+    <div class="p-5 border-b border-[#1A1F2E]">
+      <div class="flex items-center gap-[3px] h-6 mb-1">
+        <span class="w-[2px] h-2 bg-[#7C3AED] rounded-full"></span>
+        <span class="w-[2px] h-4 bg-[#EC4899] rounded-full"></span>
+        <span class="w-[2px] h-5 bg-[#00E5AB] rounded-full"></span>
+        <span class="w-[2px] h-3 bg-[#4F46E5] rounded-full"></span>
+      </div>
+      <p class="text-[10px] font-black text-white uppercase tracking-widest">Painel Admin</p>
+      <p class="text-[9px] text-[#A1A1AA] font-semibold">Rádio Campos Belos Digital</p>
+    </div>
+
+    <nav class="flex-1 p-3 space-y-1">
+      <a routerLink="/admin/dashboard" routerLinkActive="!bg-[#7C3AED]/15 !text-white !border-[#7C3AED]/30"
+        [routerLinkActiveOptions]="{exact:true}"
+        class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[11px] font-bold text-[#A1A1AA] hover:text-white hover:bg-[#111827] transition-all border border-transparent">
+        <span class="material-icons text-sm leading-none">dashboard</span> Dashboard
+      </a>
+      <a routerLink="/admin/recados" routerLinkActive="!bg-[#7C3AED]/15 !text-white !border-[#7C3AED]/30"
+        class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[11px] font-bold text-[#A1A1AA] hover:text-white hover:bg-[#111827] transition-all border border-transparent">
+        <span class="material-icons text-sm leading-none">forum</span> Recados
+      </a>
+      <a routerLink="/admin/noticias" routerLinkActive="!bg-[#7C3AED]/15 !text-white !border-[#7C3AED]/30"
+        class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[11px] font-bold text-[#A1A1AA] hover:text-white hover:bg-[#111827] transition-all border border-transparent">
+        <span class="material-icons text-sm leading-none">newspaper</span> Notícias
+      </a>
+      <a routerLink="/admin/patrocinadores" routerLinkActive="!bg-[#7C3AED]/15 !text-white !border-[#7C3AED]/30"
+        class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[11px] font-bold text-[#A1A1AA] hover:text-white hover:bg-[#111827] transition-all border border-transparent">
+        <span class="material-icons text-sm leading-none">business</span> Patrocinadores
+      </a>
+    </nav>
+
+    <div class="p-3 border-t border-[#1A1F2E] space-y-1">
+      <a href="/" class="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-[11px] font-bold text-[#A1A1AA] hover:text-white hover:bg-[#111827] transition-all">
+        <span class="material-icons text-sm leading-none">open_in_new</span> Ver Site
+      </a>
+      <button (click)="logout()" class="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-[11px] font-bold text-red-400 hover:bg-red-950/30 transition-all cursor-pointer">
+        <span class="material-icons text-sm leading-none">logout</span> Sair
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="flex-1 min-w-0 overflow-auto">
+    <!-- Mobile top bar -->
+    <div class="md:hidden bg-[#080A15] border-b border-[#1A1F2E] px-4 py-3 flex items-center justify-between sticky top-0 z-10">
+      <p class="text-xs font-black text-white uppercase tracking-widest">Admin · 87,9 FM</p>
+      <div class="flex items-center gap-3">
+        <a routerLink="/admin/dashboard" class="text-[#A1A1AA] hover:text-white"><span class="material-icons text-sm">dashboard</span></a>
+        <a routerLink="/admin/recados" class="text-[#A1A1AA] hover:text-white"><span class="material-icons text-sm">forum</span></a>
+        <a routerLink="/admin/noticias" class="text-[#A1A1AA] hover:text-white"><span class="material-icons text-sm">newspaper</span></a>
+        <a routerLink="/admin/patrocinadores" class="text-[#A1A1AA] hover:text-white"><span class="material-icons text-sm">business</span></a>
+        <button (click)="logout()" class="text-red-400"><span class="material-icons text-sm">logout</span></button>
+      </div>
+    </div>
+    <router-outlet />
+  </main>
+</div>
+}
