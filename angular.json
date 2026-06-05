@@ -20,7 +20,10 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "src/main.ts",
+            "server": "src/main.server.ts",
             "tsConfig": "tsconfig.app.json",
+            "outputPath": "dist/app",
+            "outputMode": "static",
             "assets": [
               {
                 "glob": "**/*",
@@ -29,9 +32,7 @@
             ],
             "styles": [
               "src/styles.css"
-            ],
-            "server": "src/main.server.ts",
-            "outputMode": "static"
+            ]
           },
           "configurations": {
             "production": {
@@ -60,7 +61,9 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "options": {
-            "allowedHosts": true
+            "allowedHosts": [
+              "localhost"
+            ]
           },
           "configurations": {
             "production": {
