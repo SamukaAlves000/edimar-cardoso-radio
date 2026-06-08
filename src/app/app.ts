@@ -148,38 +148,30 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
     selectedScheduleDay = signal<'seg-sex' | 'sab' | 'dom'>('seg-sex');
 
     scheduleSegSex = signal<Program[]>([
-        { id: 1,  timeRange: '00:00 - 04:00', startHour: 0,  endHour: 4,  title: 'Madrugada Sertaneja',         host: 'Edimar Cardoso', description: 'As melhores músicas sertanejas para quem está acordado de madrugada.' },
-        { id: 2,  timeRange: '04:00 - 08:00', startHour: 4,  endHour: 8,  title: 'Programação Sertaneja',       host: 'Edimar Cardoso', description: 'A melhor música sertaneja para começar o dia com energia e boa vibe.' },
-        { id: 3,  timeRange: '08:00 - 10:00', startHour: 8,  endHour: 10, title: 'Bom Dia Sertanejo',           host: 'Edimar Cardoso', description: 'Comece a manhã com o melhor do sertanejo raiz e universitário.' },
-        { id: 4,  timeRange: '10:00 - 12:00', startHour: 10, endHour: 12, title: 'Sertanejo das 10',            host: 'Edimar Cardoso', description: 'Sucessos e lançamentos sertanejos para a manhã avançada.' },
-        { id: 5,  timeRange: '12:00 - 14:00', startHour: 12, endHour: 14, title: 'Almoço com Música',           host: 'Edimar Cardoso', description: 'Pausa do almoço com as melhores músicas sertanejas da atualidade.' },
-        { id: 6,  timeRange: '14:00 - 17:00', startHour: 14, endHour: 17, title: 'Programa da Tarde',           host: 'Edimar Cardoso', description: 'Tarde animada com pedidos, recados e muito sertanejo.' },
-        { id: 7,  timeRange: '17:00 - 19:00', startHour: 17, endHour: 19, title: 'Tarde Sertaneja',             host: 'Edimar Cardoso', description: 'O melhor do sertanejo para animar a sua tarde.' },
-        { id: 8,  timeRange: '19:00 - 21:00', startHour: 19, endHour: 21, title: 'Sertanejo ao Entardecer',     host: 'Edimar Cardoso', description: 'Músicas especiais para o início da noite, sucessos de ontem e de hoje.' },
-        { id: 9,  timeRange: '21:00 - 00:00', startHour: 21, endHour: 24, title: 'Noite Sertaneja',             host: 'Edimar Cardoso', description: 'Encerre o dia com o melhor do sertanejo, do raiz ao mais moderno.' },
+        { id: 1, timeRange: '00:00 - 04:00', startHour: 0,  endHour: 4,  title: 'Madrugada Web',                               host: 'Edimar Cardoso', description: 'As melhores músicas sertanejas para quem está acordado de madrugada.' },
+        { id: 2, timeRange: '04:00 - 08:00', startHour: 4,  endHour: 8,  title: 'Super Manhã Sertaneja Web / Programa Baú Sertanejo', host: 'Edimar Cardoso', description: 'O melhor do sertanejo raiz e do Baú para começar o dia com muita animação.' },
+        { id: 3, timeRange: '08:00 - 12:00', startHour: 8,  endHour: 12, title: 'Show da Manhã Web',                            host: 'Edimar Cardoso', description: 'Sucessos e lançamentos sertanejos para animar a sua manhã.' },
+        { id: 4, timeRange: '12:00 - 16:00', startHour: 12, endHour: 16, title: 'Show da Tarde na Web',                         host: 'Edimar Cardoso', description: 'Tarde animada com pedidos, recados e muito sertanejo para todos os ouvintes.' },
+        { id: 5, timeRange: '17:00 - 20:00', startHour: 17, endHour: 20, title: 'Boteco Sertanejo',                              host: 'Edimar Cardoso', description: 'O melhor do sertanejo para embalar o fim da tarde com estilo e alegria.' },
+        { id: 6, timeRange: '20:00 - 00:00', startHour: 20, endHour: 24, title: 'Love Nejo Web',                                 host: 'Edimar Cardoso', description: 'Músicas românticas e especiais para encerrar o dia com emoção e saudade.' },
     ]);
 
     scheduleSab = signal<Program[]>([
-        { id: 10, timeRange: '00:00 - 04:00', startHour: 0,  endHour: 4,  title: 'Madrugada do Fim de Semana', host: 'Edimar Cardoso', description: 'Para os notívagos de plantão, o melhor sertanejo na madrugada de sábado.' },
-        { id: 11, timeRange: '04:00 - 08:00', startHour: 4,  endHour: 8,  title: 'Sertanejo do Amanhecer',     host: 'Edimar Cardoso', description: 'O sábado começa cedo com muita música boa para animar o dia.' },
-        { id: 12, timeRange: '08:00 - 11:00', startHour: 8,  endHour: 11, title: 'Bom Dia Sábado',             host: 'Edimar Cardoso', description: 'Manhã de sábado animada com os maiores sucessos sertanejos.' },
-        { id: 13, timeRange: '11:00 - 14:00', startHour: 11, endHour: 14, title: 'Sertanejo do Meio-Dia',      host: 'Edimar Cardoso', description: 'Chegou a hora do almoço e o sertanejo não para!' },
-        { id: 14, timeRange: '14:00 - 17:00', startHour: 14, endHour: 17, title: 'Tarde Sertaneja de Sábado',  host: 'Edimar Cardoso', description: 'Tarde de sábado com recados, pedidos e muito axé sertanejo.' },
-        { id: 15, timeRange: '17:00 - 19:00', startHour: 17, endHour: 19, title: 'Tarde Sertaneja',            host: 'Edimar Cardoso', description: 'O melhor do sertanejo para animar o fim da tarde de sábado.' },
-        { id: 16, timeRange: '19:00 - 22:00', startHour: 19, endHour: 22, title: 'Noite de Sábado Sertaneja',  host: 'Edimar Cardoso', description: 'A noite de sábado pede o melhor do sertanejo para animar a galera.' },
-        { id: 17, timeRange: '22:00 - 00:00', startHour: 22, endHour: 24, title: 'Sertanejo da Noite',         host: 'Edimar Cardoso', description: 'Encerramento do sábado com músicas românticas e muita emoção.' },
+        { id: 1, timeRange: '00:00 - 04:00', startHour: 0,  endHour: 4,  title: 'Madrugada Web',                               host: 'Edimar Cardoso', description: 'As melhores músicas sertanejas para quem está acordado de madrugada.' },
+        { id: 2, timeRange: '04:00 - 08:00', startHour: 4,  endHour: 8,  title: 'Super Manhã Sertaneja Web / Programa Baú Sertanejo', host: 'Edimar Cardoso', description: 'O melhor do sertanejo raiz e do Baú para começar o dia com muita animação.' },
+        { id: 3, timeRange: '08:00 - 12:00', startHour: 8,  endHour: 12, title: 'Show da Manhã Web',                            host: 'Edimar Cardoso', description: 'Sucessos e lançamentos sertanejos para animar a sua manhã.' },
+        { id: 4, timeRange: '12:00 - 16:00', startHour: 12, endHour: 16, title: 'Show da Tarde na Web',                         host: 'Edimar Cardoso', description: 'Tarde animada com pedidos, recados e muito sertanejo para todos os ouvintes.' },
+        { id: 5, timeRange: '17:00 - 20:00', startHour: 17, endHour: 20, title: 'Boteco Sertanejo',                              host: 'Edimar Cardoso', description: 'O melhor do sertanejo para embalar o fim da tarde com estilo e alegria.' },
+        { id: 6, timeRange: '20:00 - 00:00', startHour: 20, endHour: 24, title: 'Love Nejo Web',                                 host: 'Edimar Cardoso', description: 'Músicas românticas e especiais para encerrar o dia com emoção e saudade.' },
     ]);
 
     scheduleDom = signal<Program[]>([
-        { id: 18, timeRange: '00:00 - 04:00', startHour: 0,  endHour: 4,  title: 'Madrugada Sertaneja',         host: 'Edimar Cardoso', description: 'Madrugada de domingo com as melhores pedras do sertanejo.' },
-        { id: 19, timeRange: '04:00 - 08:00', startHour: 4,  endHour: 8,  title: 'Sertanejo do Amanhecer',      host: 'Edimar Cardoso', description: 'O domingo começa com música boa pra animar a semana.' },
-        { id: 20, timeRange: '08:00 - 10:00', startHour: 8,  endHour: 10, title: 'Bom Dia Domingo',             host: 'Edimar Cardoso', description: 'Manhã de domingo com clássicos e grandes nomes do sertanejo.' },
-        { id: 21, timeRange: '10:00 - 12:00', startHour: 10, endHour: 12, title: 'Sertanejo da Manhã',          host: 'Edimar Cardoso', description: 'Sucessos sertanejos para acompanhar o café da manhã tardio de domingo.' },
-        { id: 22, timeRange: '12:00 - 15:00', startHour: 12, endHour: 15, title: 'Almoço Sertanejo de Domingo', host: 'Edimar Cardoso', description: 'Hora do almoço com a família e o melhor sertanejo ao fundo.' },
-        { id: 23, timeRange: '15:00 - 17:00', startHour: 15, endHour: 17, title: 'Tarde de Domingo Sertaneja',  host: 'Edimar Cardoso', description: 'Tarde de domingo relaxante com músicas suaves e emotivas do sertanejo.' },
-        { id: 24, timeRange: '17:00 - 19:00', startHour: 17, endHour: 19, title: 'Tarde Sertaneja',             host: 'Edimar Cardoso', description: 'O melhor do sertanejo para fechar a tarde com chave de ouro.' },
-        { id: 25, timeRange: '19:00 - 21:00', startHour: 19, endHour: 21, title: 'Noite de Domingo Sertaneja',  host: 'Edimar Cardoso', description: 'Domingo à noite com músicas especiais para aquecer o coração.' },
-        { id: 26, timeRange: '21:00 - 00:00', startHour: 21, endHour: 24, title: 'Encerramento da Semana',      host: 'Edimar Cardoso', description: 'Encerramos a semana com o melhor do sertanejo até a meia-noite.' },
+        { id: 1, timeRange: '00:00 - 04:00', startHour: 0,  endHour: 4,  title: 'Madrugada Web',                               host: 'Edimar Cardoso', description: 'As melhores músicas sertanejas para quem está acordado de madrugada.' },
+        { id: 2, timeRange: '04:00 - 08:00', startHour: 4,  endHour: 8,  title: 'Super Manhã Sertaneja Web / Programa Baú Sertanejo', host: 'Edimar Cardoso', description: 'O melhor do sertanejo raiz e do Baú para começar o dia com muita animação.' },
+        { id: 3, timeRange: '08:00 - 12:00', startHour: 8,  endHour: 12, title: 'Show da Manhã Web',                            host: 'Edimar Cardoso', description: 'Sucessos e lançamentos sertanejos para animar a sua manhã.' },
+        { id: 4, timeRange: '12:00 - 16:00', startHour: 12, endHour: 16, title: 'Show da Tarde na Web',                         host: 'Edimar Cardoso', description: 'Tarde animada com pedidos, recados e muito sertanejo para todos os ouvintes.' },
+        { id: 5, timeRange: '17:00 - 20:00', startHour: 17, endHour: 20, title: 'Boteco Sertanejo',                              host: 'Edimar Cardoso', description: 'O melhor do sertanejo para embalar o fim da tarde com estilo e alegria.' },
+        { id: 6, timeRange: '20:00 - 00:00', startHour: 20, endHour: 24, title: 'Love Nejo Web',                                 host: 'Edimar Cardoso', description: 'Músicas românticas e especiais para encerrar o dia com emoção e saudade.' },
     ]);
 
 
@@ -515,9 +507,9 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
     private setupMediaSession() {
         if (!('mediaSession' in navigator)) return;
         navigator.mediaSession.metadata = new MediaMetadata({
-            title: 'Rádio Campos Belos Digital 87,9 FM',
+            title: 'Rádio Campos Belos Digital WEB',
             artist: 'Edmar Cardoso',
-            album: 'Programação Ao Vivo · 87,9 FM',
+            album: 'Programação Ao Vivo · WEB',
             artwork: [
                 { src: '/edimar2.png', sizes: '192x192', type: 'image/png' },
                 { src: '/edimar2.png', sizes: '512x512', type: 'image/png' },
